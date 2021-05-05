@@ -1,5 +1,8 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "cli": {
+    "analytics": "2b9cbe3f-f6b3-4e9c-9ec0-65a7e833a23c"
+  },
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
@@ -17,7 +20,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/EnglishEducationTool",
+            "outputPath": "dist/EnglishEducationTool/browser",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -28,6 +31,7 @@
               "src/assets"
             ],
             "styles": [
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/styles.css"
             ],
             "scripts": []
@@ -102,7 +106,8 @@
             "tsConfig": [
               "tsconfig.app.json",
               "tsconfig.spec.json",
-              "e2e/tsconfig.json"
+              "e2e/tsconfig.json",
+              "tsconfig.server.json"
             ],
             "exclude": [
               "**/node_modules/**"
@@ -119,6 +124,67 @@
             "production": {
               "devServerTarget": "EnglishEducationTool:serve:production"
             }
+          }
+        },
+        //"server": {
+        //  "builder": "@angular-devkit/build-angular:server",
+        //  "options": {
+        //    "outputPath": "dist/EnglishEducationTool/server",
+        //    "main": "server.ts",
+        //    "tsConfig": "tsconfig.server.json"
+        //  },
+        "server": {
+          "builder": "@angular-devkit/build-angular:server",
+          "options": {
+            "outputPath": "dist-server",
+            "main": "src/main.ts",
+            "tsConfig": "src/tsconfig.server.json"
+          },
+          //"configurations": {
+          //  "production": {
+          //    "outputHashing": "media",
+          //    "fileReplacements": [
+          //      {
+          //        "replace": "src/environments/environment.ts",
+          //        "with": "src/environments/environment.prod.ts"
+          //      }
+          //    ],
+          //    "sourceMap": false,
+          //    "optimization": true
+          //  }
+          //}
+          "production": {
+            "optimization": true,
+            "outputHashing": "all",
+            "sourceMap": false,
+            "namedChunks": false,
+            "extractLicenses": true
+          }
+        },
+        "serve-ssr": {
+          "builder": "@nguniversal/builders:ssr-dev-server",
+          "options": {
+            "browserTarget": "EnglishEducationTool:build",
+            "serverTarget": "EnglishEducationTool:server"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "EnglishEducationTool:build:production",
+              "serverTarget": "EnglishEducationTool:server:production"
+            }
+          }
+        },
+        "prerender": {
+          "builder": "@nguniversal/builders:prerender",
+          "options": {
+            "browserTarget": "EnglishEducationTool:build:production",
+            "serverTarget": "EnglishEducationTool:server:production",
+            "routes": [
+              "/"
+            ]
+          },
+          "configurations": {
+            "production": {}
           }
         }
       }

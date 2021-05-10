@@ -1,5 +1,17 @@
-<div style="margin: 100px;">
-  <h1>Voice recognition</h1>
-  <button style="margin: 10px;" (click)="startService()">Start</button>
-  <p>{{service.text}}</p>
-</div>
+
+  <h1 >Voice recognition</h1>
+  
+
+  <div class="input-group mb-3">
+    <div class="input-group-prepend">
+      <button class="btn btn-outline-secondary" (click)="startService()">Record</button>
+    </div>
+    <input type="text" class="form-control" placeholder="Enter message" value={{service.text}}>
+    <div class="input-group-append">
+      <button class="btn btn-outline-secondary" type="button">Send</button>
+      </div>
+    
+    </div>
+  <div>
+    <p>Test</p>
+  </div>

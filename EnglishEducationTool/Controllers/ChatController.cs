@@ -19,29 +19,14 @@ namespace EnglishEducationTool.Controllers
             return new string[] { "value1", "value2" };
         }
 
-        // GET api/<ChatController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
         // POST api/<ChatController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        [Route("send")]
+        public async Task<ActionResult<ChatDto>> Post([FromBody] ChatDto chatVal)
         {
+            string foo = chatVal.UserResponse;
+            return new ChatDto { AIResponse = "HELLO WORLD" };
         }
 
-        // PUT api/<ChatController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<ChatController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
     }
 }

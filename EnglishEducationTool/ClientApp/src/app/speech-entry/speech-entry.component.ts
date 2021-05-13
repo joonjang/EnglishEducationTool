@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { VoiceRecognitionService } from '../service/voice-recognition.service';
 import { ChatDto } from '../Dto/ChatDto';
 import { ChatService } from '../service/chat.service';
+//import { BadWordsFilter } from 'bad-words/';
+import BadWordsFilter from 'bad-words';
 
 @Component({
   selector: 'app-speech-entry',
@@ -13,6 +15,8 @@ import { ChatService } from '../service/chat.service';
 
 
 export class SpeechEntryComponent implements OnInit {
+
+  filter = new BadWordsFilter();
 
   constructor(
     public service: VoiceRecognitionService,
@@ -38,7 +42,14 @@ export class SpeechEntryComponent implements OnInit {
     var inputVal = <ChatDto>{};
     inputVal.UserResponse = (<HTMLInputElement>document.getElementById("userInput")).value;
 
-    this.chatService.broadcastMessage(inputVal);
+    if (this.filter.isProfane(inputVal.UserResponse)) {
+
+    }
+    else {
+      this.chatService.broadcastMessage(inputVal);
+    }
+
+    
   }
 
 

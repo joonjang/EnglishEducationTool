@@ -6,12 +6,21 @@
     <div class="input-group-prepend">
       <button class="btn btn-outline-secondary" (click)="startService()">Record</button>
     </div>
+
     <input id="userInput" type="text" class="form-control" placeholder="Enter message" value={{service.text}}>
+
     <div class="input-group-append">
       <button class="btn btn-outline-secondary" type="button" (click)="sendClick()">Send</button>
-      </div>
-    
     </div>
+  </div>
+
+  <div class="alert alert-warning alert-dismissible fade show">
+    <h4 class="alert-heading"><i class="fa fa-warning"></i> Warning!</h4>
+    <p>Please enter a valid input without the use of profanity.</p>
+   
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+  </div>
+
   <div>
     <p>Test</p>
   </div>

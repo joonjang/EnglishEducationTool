@@ -24,8 +24,9 @@ namespace EnglishEducationTool.Controllers
         [Route("send")]
         public async Task<ActionResult<ChatDto>> Post([FromBody] ChatDto chatVal)
         {
-            string foo = chatVal.UserResponse;
-            return new ChatDto { AIResponse = "HELLO WORLD" };
+            return new ChatDto {
+                UserResponse = chatVal.UserResponse,
+                AIResponse = "HELLO WORLD" };
         }
 
     }

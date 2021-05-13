@@ -22,7 +22,10 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "esModuleInterop": true,
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

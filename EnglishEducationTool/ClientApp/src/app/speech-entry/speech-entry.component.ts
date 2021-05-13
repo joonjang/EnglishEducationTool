@@ -17,6 +17,7 @@ import BadWordsFilter from 'bad-words';
 export class SpeechEntryComponent implements OnInit {
 
   filter = new BadWordsFilter();
+  badwordWarning: Boolean = false;
 
   constructor(
     public service: VoiceRecognitionService,
@@ -43,13 +44,19 @@ export class SpeechEntryComponent implements OnInit {
     inputVal.UserResponse = (<HTMLInputElement>document.getElementById("userInput")).value;
 
     if (this.filter.isProfane(inputVal.UserResponse)) {
-
+      console.log("bad word detected")
+      this.badwordWarning = true;
     }
     else {
+      console.log("sent to back-end")
       this.chatService.broadcastMessage(inputVal);
     }
 
     
+  }
+
+  closeWarning() {
+    this.badwordWarning = false;
   }
 
 

@@ -17,95 +17,115 @@
   </div>
 
 
+
   <div class="form-control">
     <p>Test</p>
   </div>
 
-
-
-  <mat-form-field class="input-full-width">
-
-    <mat-label>Message</mat-label>
-    <input type="text"
-           matInput
-           [formControl]="inputFormControl"
-           class="form-control"
-           placeholder="Enter message"
-           value={{service.text}}
-           autocomplete="off"
-           [errorStateMatcher]="matcher">
-
-    <mat-error *ngIf="inputFormControl.hasError('required')">
-      Message is empty
-    </mat-error>
-
-    <mat-error *ngIf="inputFormControl.hasError('maxlength')">
-      Message exceeds 140 characters
-    </mat-error>
-
-    <mat-hint>{{ inputFormControl.value.length }}/140</mat-hint>
-
-  </mat-form-field>
-
-  <div class="input-button-row">
+  <div id="input-button-row">
 
     <button mat-raised-button
+            class="input-button"
             color="accent"
             (click)="startService()">
-      Record
+      Record <mat-icon>mic</mat-icon>
     </button>
 
+    <mat-form-field id="input-full-width">
+
+      <mat-label>Message</mat-label>
+
+
+      <input type="text"
+             matInput
+             [formControl]="inputFormControl"
+             placeholder="Enter message"
+             value={{service.text}}
+             autocomplete="off"
+             [errorStateMatcher]="matcher">
+
+      <mat-error *ngIf="inputFormControl.hasError('required')">
+        Message is empty
+      </mat-error>
+
+      <mat-error *ngIf="inputFormControl.hasError('maxlength')">
+        Message exceeds 140 characters
+      </mat-error>
+
+      <mat-hint>{{ inputFormControl.value.length }}/140</mat-hint>
+
+
+    </mat-form-field>
+
     <button mat-raised-button
+            class="input-button"
             color="primary"
             (click)="sendClick()"
             [disabled]="!inputFormControl.valid">
-      Send
+      Send <mat-icon>send</mat-icon>
     </button>
 
   </div>
-</form>
+
+  <!--<div class="input-button-row">
+
+      <button mat-raised-button
+              color="accent"
+              (click)="startService()">
+        <mat-icon>mic</mat-icon> Record
+      </button>
+
+      <button mat-raised-button
+              color="primary"
+              (click)="sendClick()"
+              [disabled]="!inputFormControl.valid">
+        Send <mat-icon>send</mat-icon>
+      </button>
+
+    </div>
+  </form>
 
 
 
 
 
-<!-- Warning Alert -->
-<!--<div class="alert alert-danger alert-dismissible fade show" *ngIf="badwordWarning">
-  <strong>Warning!</strong> Please enter a valid input without the use of profanity.
-  <button type="button"
-          class="btn-close"
-          data-bs-dismiss="alert"
-          aria-label="Close"
-          (click)="closeWarning()"></button>
-</div>
-
-
-<div class="form-control">
-  <p>Test</p>
-</div>
-
-<label> {{ inputCount }}</label>
-
-<div class="input-group mb-3" ng-controller="inputController">
-  <div class="input-group-prepend">
-    <button class="btn btn-outline-secondary" (click)="startService()">Record</button>
+  <!-- Warning Alert -->
+  <!--<div class="alert alert-danger alert-dismissible fade show" *ngIf="badwordWarning">
+    <strong>Warning!</strong> Please enter a valid input without the use of profanity.
+    <button type="button"
+            class="btn-close"
+            data-bs-dismiss="alert"
+            aria-label="Close"
+            (click)="closeWarning()"></button>
   </div>
 
-  <input id="userInput"
-          type="text"
-          class="form-control"
-          placeholder="Enter message"
-          value={{service.text}}
-          (keyup.enter)="sendClick()"
-          maxlength="140"
-         ng-model="inputVar"
-          ng-change="realtimeInput(inputVar)">
 
-  <div class="input-group-append">
-    <button class="btn btn-outline-secondary"
-            type="button"
-            (click)="sendClick()">
-      Send
-    </button>
+  <div class="form-control">
+    <p>Test</p>
   </div>
-</div>-->
+
+  <label> {{ inputCount }}</label>
+
+  <div class="input-group mb-3" ng-controller="inputController">
+    <div class="input-group-prepend">
+      <button class="btn btn-outline-secondary" (click)="startService()">Record</button>
+    </div>
+
+    <input id="userInput"
+            type="text"
+            class="form-control"
+            placeholder="Enter message"
+            value={{service.text}}
+            (keyup.enter)="sendClick()"
+            maxlength="140"
+           ng-model="inputVar"
+            ng-change="realtimeInput(inputVar)">
+
+    <div class="input-group-append">
+      <button class="btn btn-outline-secondary"
+              type="button"
+              (click)="sendClick()">
+        Send
+      </button>
+    </div>
+  </div>-->

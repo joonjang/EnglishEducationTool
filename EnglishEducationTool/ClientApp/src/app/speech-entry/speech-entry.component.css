@@ -4,6 +4,20 @@
   width: 100%;
 }*/
 
-.input-full-width {
+#input-button-row {
+  display: table;
   width: 100%;
 }
+
+.input-button, #input-full-width {
+  display: table-cell;
+  width: auto;
+}
+
+
+#input-full-width {
+  width: 90%;
+  padding: 0 10px 0 10px;
+}
+
+

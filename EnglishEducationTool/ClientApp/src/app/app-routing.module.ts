@@ -3,7 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { SpeechEntryComponent } from './speech-entry/speech-entry.component';
 import { HomeComponent } from './home/home.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
-import { AngularMaterialModule } from './angular-material.module'
 
 
 
@@ -15,7 +14,6 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
-    AngularMaterialModule,
     RouterModule.forRoot(routes, {
     initialNavigation: 'enabled'
 })],

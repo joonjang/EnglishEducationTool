@@ -1,23 +1,38 @@
-/*.input-form {
-  min-width: 150px;
-  max-width: 500px;
+/*
+.form-container {
   width: 100%;
-}*/
-
-#input-button-row {
+  color: navy;
+  display:table;
+}
+*/
+#input-container {
   display: table;
-  width: 100%;
+  bottom: 10px;
+  position: absolute;
+  width: 90%;
 }
 
-.input-button, #input-full-width {
+#conversation-history {
+  height: calc(100% - 220px);
+  width: 90%;
+  position: absolute;
+  overflow-y: scroll;
+}
+
+#input-full-width {
+  width: 100%;
+  padding: 0 10px 0 10px;
+}
+
+.input-button-container, #input-full-width, .input-button-container {
   display: table-cell;
   width: auto;
 }
 
+.input-button-container {
+  justify-content: center;
+  width: 80px;
 
-#input-full-width {
-  width: 90%;
-  padding: 0 10px 0 10px;
 }
 
 

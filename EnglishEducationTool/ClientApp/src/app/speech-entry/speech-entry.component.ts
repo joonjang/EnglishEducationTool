@@ -26,6 +26,12 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 
 export class SpeechEntryComponent implements OnInit {
 
+  messages =
+    [
+      "User: Hello",
+      "AI: Hello",
+    ];
+
   filter = new BadWordsFilter();
   badwordWarning: Boolean = false;
   
@@ -72,6 +78,11 @@ export class SpeechEntryComponent implements OnInit {
 
   closeWarning() {
     this.badwordWarning = false;
+  }
+
+  fooFunc() {
+    this.messages.push("User: Hello", "AI: Hello");
+      
   }
 
 }

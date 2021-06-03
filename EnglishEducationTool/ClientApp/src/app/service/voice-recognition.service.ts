@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 
 
 declare var webkitSpeechRecognition: any;
@@ -12,6 +13,7 @@ export class VoiceRecognitionService {
   isStoppedSpeechRecog = false;
   public text = '';
   tempWords!: string;
+  public textObs: any;
 
   constructor() { }
 
@@ -20,15 +22,25 @@ export class VoiceRecognitionService {
     this.recognition.interimResults = true;
     this.recognition.lang = 'en-US';
 
-    this.recognition.onresult = ( (e: any) => {
-      const transcript = Array.from(e.results)
-        .map((result: any) => result[0])
-        .map((result) => result.transcript)
-        .join('');
-      this.tempWords = transcript;
-      console.log(transcript);
-    });
+    this.textObs = Observable.create((obs: any) => {
+      this.recognition.onresult = ((e: any) => {
+        const transcript = Array.from(e.results)
+          .map((result: any) => result[0])
+          .map((result) => result.transcript)
+          .join('')
+        obs.next(transcript)
+        //this.tempWords = transcript;
+        console.log(transcript);
+      });
+    })
+    
   }
+
+  //public textObservation() {
+  //  return Observable.create((obs:any) => {
+  //    obs.next(this.tempWords);
+  //  })
+  //}
 
   start() {
     this.recognition.start();

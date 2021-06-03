@@ -63,19 +63,19 @@
                      matInput
                      [formControl]="inputFormControl"
                      placeholder="Enter message"
-                     value={{service.text}}
                      autocomplete="off"
                      [errorStateMatcher]="matcher">
+              <!--value={{service.text}}-->
 
               <mat-error *ngIf="inputFormControl.hasError('required')">
                 Message is empty
               </mat-error>
 
               <mat-error *ngIf="inputFormControl.hasError('maxlength')">
-                Message exceeds 80 characters
+                Message exceeds 140 characters
               </mat-error>
 
-              <mat-hint>{{ inputFormControl.value.length }}/80</mat-hint>
+              <mat-hint>{{ inputFormControl.value.length }}/140</mat-hint>
 
 
             </mat-form-field>

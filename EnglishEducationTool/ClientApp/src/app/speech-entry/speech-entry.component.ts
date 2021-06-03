@@ -37,7 +37,7 @@ export class SpeechEntryComponent implements OnInit {
   
   inputFormControl = new FormControl('', [
     Validators.required,
-    Validators.maxLength(80),
+    Validators.maxLength(140),
   ]);
 
   inputCount = this.inputFormControl.value.length;
@@ -50,7 +50,13 @@ export class SpeechEntryComponent implements OnInit {
     private router: Router,
     private chatService: ChatService,
   ) {
-    this.service.init()
+    this.service.init();
+
+    this.service.textObs.subscribe((e: string) => {
+      this.inputFormControl.setValue(e);
+      this.inputFormControl.markAsDirty();
+    })
+
   }
 
   ngOnInit(): void {
@@ -59,7 +65,10 @@ export class SpeechEntryComponent implements OnInit {
   
 
   startService() {
-    this.service.start()
+    this.service.start();
+
+    
+
   }
 
   sendClick() {
@@ -71,6 +80,8 @@ export class SpeechEntryComponent implements OnInit {
       this.badwordWarning = true;
     }
     else {
+      this.messages.push("User: " + inputVal.UserResponse);
+
       console.log("sent to back-end")
       this.chatService.broadcastMessage(inputVal);
     }

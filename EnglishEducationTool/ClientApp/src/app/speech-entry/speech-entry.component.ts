@@ -37,7 +37,7 @@ export class SpeechEntryComponent implements OnInit {
   
   inputFormControl = new FormControl('', [
     Validators.required,
-    Validators.maxLength(140),
+    Validators.maxLength(80),
   ]);
 
   inputCount = this.inputFormControl.value.length;

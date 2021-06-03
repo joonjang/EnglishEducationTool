@@ -49,13 +49,43 @@
 #message-list {
   flex: 1 1 auto;
   overflow-y: auto;
-  height: calc(100vh - 220px);
+  height: calc(100vh - 200px);
   /*background-color: yellow;*/
 }
 
-#side-drawer{
+mat-drawer{
     padding: 0 10px 0 0;
+    width: 40%;
 }
 
+.inline-container {
+  display: flex;
+  flex-direction: row;
+}
 
+.inline-container mat-icon{
+    margin-top: 5px;
+    margin-right:5px;
+}
 
+.inline-container h2{
+    margin: 0;
+}
+
+.inline-container h4 {
+  margin: 0;
+}
+
+#dic-word{
+    display:flex;
+    flex-direction:column;
+}
+
+.description-container p{
+    margin-left:10px;
+}
+
+.description-container h4{
+    margin-top: 5px;
+    margin-bottom:0;
+}

@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
 import { VoiceRecognitionService } from '../service/voice-recognition.service';
 import { ChatDto } from '../Dto/ChatDto';
@@ -7,6 +7,8 @@ import { ChatService } from '../service/chat.service';
 import BadWordsFilter from 'bad-words';
 import { FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
+import { CdkTextareaAutosize } from '@angular/cdk/text-field';
+import { take } from 'rxjs/operators';
 
 /** Error when invalid control is over char limit or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -38,17 +40,17 @@ export class SpeechEntryComponent implements OnInit {
   inputFormControl = new FormControl('', [
     Validators.required,
     Validators.maxLength(140),
+    //maxLength in: ChatDto.cs, speech-entry component html and typescript
   ]);
 
   inputCount = this.inputFormControl.value.length;
-
-
   matcher = new MyErrorStateMatcher();
 
   constructor(
     public service: VoiceRecognitionService,
     private router: Router,
     private chatService: ChatService,
+    private _ngZone: NgZone
   ) {
     this.service.init();
 
@@ -63,6 +65,14 @@ export class SpeechEntryComponent implements OnInit {
   }
 
   
+
+  @ViewChild('autosize') autosize!: CdkTextareaAutosize;
+
+  triggerResize() {
+    // Wait for changes to be applied, then trigger textarea resize.
+    this._ngZone.onStable.pipe(take(1))
+      .subscribe(() => this.autosize.resizeToFitContent(true));
+  }
 
   startService() {
     this.service.start();
@@ -84,6 +94,8 @@ export class SpeechEntryComponent implements OnInit {
 
       console.log("sent to back-end")
       this.chatService.broadcastMessage(inputVal);
+
+      this.inputFormControl.reset("");
     }
   }
 

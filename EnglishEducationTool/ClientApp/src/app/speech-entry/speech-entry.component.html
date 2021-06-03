@@ -59,12 +59,15 @@
               <mat-label>Message</mat-label>
 
 
-              <input type="text"
-                     matInput
-                     [formControl]="inputFormControl"
-                     placeholder="Enter message"
-                     autocomplete="off"
-                     [errorStateMatcher]="matcher">
+              <textarea type="text"
+                         matInput
+                         [formControl]="inputFormControl"
+                         placeholder="Enter message"
+                         autocomplete="off"
+                         [errorStateMatcher]="matcher"
+                        cdkTextareaAutosize
+                        #autosize="cdkTextareaAutosize"
+                        cdkAutosizeMinRows="1"></textarea>
               <!--value={{service.text}}-->
 
               <mat-error *ngIf="inputFormControl.hasError('required')">

@@ -43,6 +43,8 @@ export class SpeechEntryComponent implements OnInit {
     //maxLength in: ChatDto.cs, speech-entry component html and typescript
   ]);
 
+  searchFormControl = new FormControl('', []);
+
   inputCount = this.inputFormControl.value.length;
   matcher = new MyErrorStateMatcher();
 

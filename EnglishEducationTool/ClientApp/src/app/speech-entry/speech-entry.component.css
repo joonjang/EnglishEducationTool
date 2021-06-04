@@ -81,6 +81,11 @@ mat-drawer{
     flex-direction:column;
 }
 
+.definition-container mat-form-field {
+  width: 100%;
+  margin-bottom: -1.25em;
+}
+
 .description-container p{
     margin-left:10px;
 }
@@ -89,3 +94,4 @@ mat-drawer{
     margin-top: 5px;
     margin-bottom:0;
 }
+

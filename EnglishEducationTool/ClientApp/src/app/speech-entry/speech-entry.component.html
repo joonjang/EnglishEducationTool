@@ -1,22 +1,36 @@
 <mat-drawer-container class="drawer-container">
 
-  <mat-drawer mode="side" opened>
-
-    <h1>Dictionary</h1>
+  <mat-drawer mode="side" opened disableClose>
 
     <div class="definition-container">
+
+      <h1>Dictionary [Language]</h1>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Search a word</mat-label>
+        <input matInput
+               placeholder="Search..."
+               type="text"
+               autocomplete="off">
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
 
       <div class="inline-container">
         <mat-icon>volume_up</mat-icon>
         <div id="dic-word">
-          <h2><strong>[WORD] perseverance</strong></h2>
-          <h4>[PHONETIC] /ˌpərsəˈvɪrəns/</h4>
+          <h2><strong>perseverance [WORD]</strong></h2>
+          <h4>/ˌpərsəˈvɪrəns/ [PHONETIC]</h4>
         </div>
       </div>
       <div class="description-container">
-        <h4><i>[PARTOFSPEECH] noun</i></h4>
-        <p>[DEFINITION] Persistence in doing something despite difficulty or delay in achieving success.</p>
+        <h4><i>noun [PARTOFSPEECH]</i></h4>
+        <p>Persistence in doing something despite difficulty or delay in achieving success. [DEFINITION]</p>
       </div>
+
+    </div>
+
+    <div class="grammar-container">
+      <h1>Grammar</h1>
     </div>
                                   
   </mat-drawer>

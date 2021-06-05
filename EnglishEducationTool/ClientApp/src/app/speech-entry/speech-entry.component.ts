@@ -78,9 +78,6 @@ export class SpeechEntryComponent implements OnInit {
 
   startService() {
     this.service.start();
-
-    
-
   }
 
   sendClick() {
@@ -105,9 +102,25 @@ export class SpeechEntryComponent implements OnInit {
     this.badwordWarning = false;
   }
 
+  async getDefinition() {
+
+    //https://api.dictionaryapi.dev/api/v2/entries/en_US/hello
+
+    let defineWord = this.searchFormControl.value;
+    const dicUrl = new URL("https://api.dictionaryapi.dev/api/v2/entries/en_US/");
+
+    const response = await fetch(dicUrl.toString() + defineWord);
+
+    console.log(response.json());
+
+    return response.json();
+  }
+
+  ////foooooooooooo (fighters)
+
   fooFunc() {
-    this.messages.push("User: Hello", "AI: Hello");
-      
+    //this.messages.push("User: Hello", "AI: Hello");
+    this.searchFormControl.setValue("test");
   }
 
 }

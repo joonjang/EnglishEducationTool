@@ -51,7 +51,7 @@ export class SpeechEntryComponent implements OnInit {
   matcher = new MyErrorStateMatcher();
 
  
-  public dicObject: RootDictionary[] = [];
+  public dicObj: RootDictionary[] = [];
 
   constructor(
     public service: VoiceRecognitionService,
@@ -117,13 +117,13 @@ export class SpeechEntryComponent implements OnInit {
 
     // debugging with mock data
     this.dictionaryService.getMockWord(defineWord).subscribe(data => {
-      this.dicObject = data;
-      console.log(this.dicObject);
+      this.dicObj = data;
+      console.log(this.dicObj);
     }, error => console.log(error));
 
     //this.dictionaryService.getWord(defineWord).subscribe(data => {
-    //  this.dicObject = data;
-    //  console.log(this.dicObject);
+    //  this.dicObj = data;
+    //  console.log(this.dicObj);
     //}, error => console.log(error));
 
 

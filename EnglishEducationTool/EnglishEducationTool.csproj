@@ -30,6 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\src\app\interface\dictionaryAPI.ts" />
     <None Remove="ClientApp\src\app\speech-entry\chat.ts" />
   </ItemGroup>
 

@@ -9,6 +9,8 @@ import { FormControl, FormGroupDirective, NgForm, Validators } from '@angular/fo
 import { ErrorStateMatcher } from '@angular/material/core';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { take } from 'rxjs/operators';
+import { DictionaryService } from '../service/dictionary.service';
+import { RootDictionary } from '../interface/dictionaryAPI';
 
 /** Error when invalid control is over char limit or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -48,10 +50,14 @@ export class SpeechEntryComponent implements OnInit {
   inputCount = this.inputFormControl.value.length;
   matcher = new MyErrorStateMatcher();
 
+ 
+  public dicObject: RootDictionary[] = [];
+
   constructor(
     public service: VoiceRecognitionService,
     private router: Router,
     private chatService: ChatService,
+    private dictionaryService: DictionaryService,
     private _ngZone: NgZone
   ) {
     this.service.init();
@@ -64,6 +70,7 @@ export class SpeechEntryComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getDefinition();
   }
 
   
@@ -102,25 +109,44 @@ export class SpeechEntryComponent implements OnInit {
     this.badwordWarning = false;
   }
 
-  async getDefinition() {
+  ///// TODO: implement dictionary API service so the component doesnt know the logic, only exposed to methods
 
-    //https://api.dictionaryapi.dev/api/v2/entries/en_US/hello
+  getDefinition() {
 
-    let defineWord = this.searchFormControl.value;
-    const dicUrl = new URL("https://api.dictionaryapi.dev/api/v2/entries/en_US/");
+    let defineWord =  this.searchFormControl.value;
 
-    const response = await fetch(dicUrl.toString() + defineWord);
+    // debugging with mock data
+    this.dictionaryService.getMockWord(defineWord).subscribe(data => {
+      this.dicObject = data;
+      console.log(this.dicObject);
+    }, error => console.log(error));
 
-    console.log(response.json());
+    //this.dictionaryService.getWord(defineWord).subscribe(data => {
+    //  this.dicObject = data;
+    //  console.log(this.dicObject);
+    //}, error => console.log(error));
 
-    return response.json();
+
   }
 
   ////foooooooooooo (fighters)
 
   fooFunc() {
     //this.messages.push("User: Hello", "AI: Hello");
-    this.searchFormControl.setValue("test");
+    //this.searchFormControl.setValue("test");
+
+    //try {
+    //  var foo = this.getDefinition().subscribe(data => {
+    //    this.dicObject?.meanings = data.meanings;
+    //    this.dicObject?.phonetics = data.phonetics;
+    //    this.dicObject!?.word = data.word;
+    //  });
+    //} catch {
+    //  console.log('failure');
+    //}
+    
+    var x = "foo"
+    console.log(x);
   }
 
 }

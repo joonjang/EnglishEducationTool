@@ -51,7 +51,21 @@ export class SpeechEntryComponent implements OnInit {
   matcher = new MyErrorStateMatcher();
 
  
-  public dicObj: RootDictionary[] = [];
+  public dicObj: RootDictionary[] = [{
+        word: "",
+        phonetics: [{
+          text: "",
+          audio: ""
+        }],
+        meanings: [{
+          partOfSpeech: "",
+          definitions: [{
+            definition: "",
+            synonyms: [""],
+            example: ""
+          }]
+        }]
+      }];
 
   constructor(
     public service: VoiceRecognitionService,
@@ -121,29 +135,20 @@ export class SpeechEntryComponent implements OnInit {
       console.log(this.dicObj);
     }, error => console.log(error));
 
-    //if (defineWord == "") {
-    // this.dicObj = [{
-    //    word: "",
-    //    phonetics: [{
-    //      text: "",
-    //      audio: ""
-    //    }],
-    //    meanings: [{
-    //      partOfSpeech: "",
-    //      definitions: [{
-    //        definition: "",
-    //        synonyms: [""],
-    //        example: ""
-    //      }]
-    //    }]
-    //  }];
-    //} else {
+    //if (defineWord != "") {
     //  this.dictionaryService.getWord(defineWord).subscribe(data => {
     //    this.dicObj = data;
     //    console.log(this.dicObj);
     //  }, error => console.log(error));
     //}
 
+  }
+
+  playAudio() {
+    let audio = new Audio();
+    audio.src = this.dicObj[0].phonetics[0].audio;
+    audio.load();
+    audio.play();
   }
 
   ////foooooooooooo (fighters)

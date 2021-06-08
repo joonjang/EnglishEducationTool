@@ -121,11 +121,28 @@ export class SpeechEntryComponent implements OnInit {
       console.log(this.dicObj);
     }, error => console.log(error));
 
-    //this.dictionaryService.getWord(defineWord).subscribe(data => {
-    //  this.dicObj = data;
-    //  console.log(this.dicObj);
-    //}, error => console.log(error));
-
+    //if (defineWord == "") {
+    // this.dicObj = [{
+    //    word: "",
+    //    phonetics: [{
+    //      text: "",
+    //      audio: ""
+    //    }],
+    //    meanings: [{
+    //      partOfSpeech: "",
+    //      definitions: [{
+    //        definition: "",
+    //        synonyms: [""],
+    //        example: ""
+    //      }]
+    //    }]
+    //  }];
+    //} else {
+    //  this.dictionaryService.getWord(defineWord).subscribe(data => {
+    //    this.dicObj = data;
+    //    console.log(this.dicObj);
+    //  }, error => console.log(error));
+    //}
 
   }
 

@@ -27,9 +27,9 @@
           <h4>{{ dicObj[0].phonetics[0].text }}</h4>
         </div>
       </div>
-      <div class="description-container">
-        <h4><i>noun [PARTOFSPEECH]</i></h4>
-        <p>Persistence in doing something despite difficulty or delay in achieving success. [DEFINITION]</p>
+      <div class="description-container" *ngFor="let dicMeaning of dicObj[0].meanings">
+        <h4><i>{{ dicMeaning.partOfSpeech }}</i></h4>
+        <p> {{ dicMeaning.definitions[0].definition }}</p>
       </div>
 
     </div>

@@ -20,25 +20,29 @@
         </button>
       </mat-form-field>
 
-      <div class="inline-container">
-        <div *ngIf="dicObj[0].word != '' ">
+      <div *ngIf="dicObj[0].word != ''">
+        <div class="inline-container">
+          
           <button mat-button
                   (click)="playAudio()">
             <mat-icon>volume_up</mat-icon>
           </button>
-        </div>
-        <div id="dic-word">
-          <h2><strong>{{ dicObj[0].word }}</strong></h2>
-          <h4>{{ dicObj[0].phonetics[0].text }}</h4>
-        </div>
-      </div>
-      <div class="description-container" *ngFor="let dicMeaning of dicObj[0].meanings">
-        <h4><i>{{ dicMeaning.partOfSpeech }}</i></h4>
-        <p> {{ dicMeaning.definitions[0].definition }}</p>
-      </div>
 
+          <div id="dic-word">
+            <h2><strong>{{ dicObj[0].word }}</strong></h2>
+            <h4>{{ dicObj[0].phonetics[0].text }}</h4>
+          </div>
+        </div>
+        <div class="description-container"
+             *ngFor="let dicMeaning of dicObj[0].meanings">
+          <h4><i>{{ dicMeaning.partOfSpeech }}</i></h4>
+          <p style="margin-bottom: 0;"> {{ dicMeaning.definitions[0].definition }}</p>
+          <p style="color: gray;" *ngIf="dicMeaning.definitions[0].example != null"> "{{ dicMeaning.definitions[0].example }}" </p>
+        </div>
+      </div>
     </div>
 
+    <br />
     <mat-divider></mat-divider>
     <br />
 

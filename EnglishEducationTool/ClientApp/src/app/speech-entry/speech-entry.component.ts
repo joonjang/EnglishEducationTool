@@ -103,14 +103,14 @@ export class SpeechEntryComponent implements OnInit {
 
   sendClick() {
     var inputVal = <ChatDto>{};
-    inputVal.UserResponse = this.inputFormControl.value;
+    inputVal.userResponse = this.inputFormControl.value;
 
-    if (this.filter.isProfane(inputVal.UserResponse)) {
+    if (this.filter.isProfane(inputVal.userResponse)) {
       console.log("bad word detected")
       this.badwordWarning = true;
     }
     else {
-      this.messages.push("User: " + inputVal.UserResponse);
+      this.messages.push("User: " + inputVal.userResponse);
 
       console.log("sent to back-end")
       this.chatService.broadcastMessage(inputVal);

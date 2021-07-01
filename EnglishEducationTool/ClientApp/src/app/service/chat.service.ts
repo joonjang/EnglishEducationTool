@@ -8,7 +8,7 @@ import { ChatDto } from '../Dto/ChatDto';
 })
 export class ChatService {
 
-  private receivedMessageObject: ChatDto = new ChatDto();
+  private receivedMessageObject: ChatDto = { userResponse: "", botResponse: "", flaggedTokens: []};
   private sharedObj = new Subject<ChatDto>();
 
   constructor

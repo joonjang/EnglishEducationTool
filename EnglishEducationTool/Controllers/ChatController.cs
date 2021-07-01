@@ -32,7 +32,7 @@ namespace EnglishEducationTool.Controllers
         {
             // TODO:  OpenAI chat response implementation
 
-            string userProof = "NO PROOFING DONE";
+            FlaggedToken[] userProof;
 
             //// microsoft SpellCheck API
             //try
@@ -49,9 +49,11 @@ namespace EnglishEducationTool.Controllers
             userProof = await MockProofing(chatVal.UserResponse);
 
             return new ChatDto {
-                UserResponse = userProof,
-                AIResponse = "HELLO WORLD [OPEN AI RESPONSE]" };
+                FlaggedTokens = userProof,
+                BotResponse = "HELLO WORLD [OPEN AI RESPONSE]" };
         }
+
+        #region SpellCheck API
 
         //// Add your Azure subscription key to your environment variables.
         //static string key = Environment.GetEnvironmentVariable("BING_AUTOSUGGEST_SUBSCRIPTION_KEY");
@@ -121,10 +123,12 @@ namespace EnglishEducationTool.Controllers
             return contentString;
         }
 
-        Task<string> MockProofing(string userChatInput)
+        #endregion
+
+        async Task<FlaggedToken[]> MockProofing(string userChatInput)
         {
-            // "There going to bring they’re suitcases."
-            string contentString = "{\"_type\": \"SpellCheck\", \"flaggedTokens\": [{\"offset\": 21, \"token\": \"they’re\", \"type\": \"UnknownToken\", \"suggestions\": [{\"suggestion\": \"their\", \"score\": 0.8961550966590242}]}]}";
+            //  "Hollo, wrld!"
+            string contentString = "{\"_type\": \"SpellCheck\", \"flaggedTokens\": [{\"offset\": 0, \"token\": \"Hollo\", \"type\": \"UnknownToken\", \"suggestions\": [{\"suggestion\": \"Hello\", \"score\": 0.9124109442175475}, {\"suggestion\": \"Hollow\", \"score\": 0.7889023543711866}]}, {\"offset\": 7, \"token\": \"wrld\", \"type\": \"UnknownToken\", \"suggestions\": [{\"suggestion\": \"world\", \"score\": 0.9124109442175475}]}]}";
 
             //mock json data for contentString:
             // "Hollo, wrld!"
@@ -134,7 +138,8 @@ namespace EnglishEducationTool.Controllers
             // "{\"_type\": \"SpellCheck\", \"flaggedTokens\": [{\"offset\": 21, \"token\": \"they’re\", \"type\": \"UnknownToken\", \"suggestions\": [{\"suggestion\": \"their\", \"score\": 0.8961550966590242}]}]}"
             //Deserialize the JSON response from the API
             SpellCheck jsonObj = JsonConvert.DeserializeObject<SpellCheck>(contentString);
-            return Task.FromResult(contentString);
+            FlaggedToken[] flaggedToken = jsonObj.FlaggedTokens;
+            return flaggedToken;
         }
 
 

@@ -38,6 +38,7 @@ export class SpeechEntryComponent implements OnInit {
 
   filter = new BadWordsFilter();
   badwordWarning: Boolean = false;
+  wordToProof = "HELLO JOON I LOVE YOU";
   
   inputFormControl = new FormControl('', [
     Validators.required,
@@ -110,12 +111,23 @@ export class SpeechEntryComponent implements OnInit {
       this.badwordWarning = true;
     }
     else {
+
+      //user input to search in live production version
+      //this.wordToProof = this.inputFormControl.value;
+      //todo:D debug string input used to correct spelling
+      this.wordToProof = "Hollo, wrld!"
+      //TODO: HYPERLINK THE USER INPUT WITH JSON INFO OF CORRECTED SPELLING AND HOW MANY TOKEN
+      // SUGGESTIONS HAVE BEEN RECEIVED
+     
+
       this.messages.push("User: " + inputVal.userResponse);
 
       console.log("sent to back-end")
       this.chatService.broadcastMessage(inputVal);
 
       this.inputFormControl.reset("");
+
+      
     }
   }
 

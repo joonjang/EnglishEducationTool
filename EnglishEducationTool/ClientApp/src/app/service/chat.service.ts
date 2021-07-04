@@ -18,8 +18,8 @@ export class ChatService {
   )
   { }
 
-  public broadcastMessage(chatDto: any) {
-    this.http.post(this.baseUrl + "api/Chat/send", chatDto).subscribe(data => console.log(data));
+  public broadcastMessage(chatDto: any): Observable<any> {
+    return this.http.post(this.baseUrl + "api/Chat/send", chatDto);
   }
 
   public retrieveMappedObject(): Observable<ChatDto> {

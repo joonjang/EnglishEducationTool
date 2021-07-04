@@ -102,7 +102,7 @@ export class SpeechEntryComponent implements OnInit {
     this.service.start();
   }
 
-  sendClick() {
+  async sendClick() {
     var inputVal = <ChatDto>{};
     inputVal.userResponse = this.inputFormControl.value;
 
@@ -120,15 +120,30 @@ export class SpeechEntryComponent implements OnInit {
       // SUGGESTIONS HAVE BEEN RECEIVED
      
 
-      this.messages.push("User: " + inputVal.userResponse);
+      this.messages.push("User: " + inputVal.userResponse); 
 
       console.log("sent to back-end")
-      this.chatService.broadcastMessage(inputVal);
+
+      await this.spellCheckJsonParse(inputVal);
 
       this.inputFormControl.reset("");
 
       
     }
+  }
+
+  // todo: DO THIS FIRST, can received json data, but need to do something with it. can only receive atm
+  // possibly callibrate sync and await use, dont understand if its being used properly
+  async spellCheckJsonParse(input: ChatDto) {
+    var foo2;
+    this.chatService.broadcastMessage(input).subscribe((data: ChatDto) => {
+      foo2 = data.flaggedTokens
+      console.log("foo2 in subscribe: " + foo2);
+      console.log("data in subscribe: " + data);
+      console.log("data flaggedToken in subscribe: " + data.flaggedTokens);
+    });
+
+    console.log(foo2);
   }
 
   closeWarning() {

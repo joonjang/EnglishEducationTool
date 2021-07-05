@@ -7,6 +7,10 @@ declare var webkitSpeechRecognition: any;
 @Injectable({
   providedIn: 'root'
 })
+
+  //https://codeburst.io/creating-a-speech-recognition-app-in-angular-8d1fd8d977ca
+  //https://github.com/Donishka/angular-voice-recognition
+
 export class VoiceRecognitionService {
 
   recognition = new webkitSpeechRecognition();
@@ -43,11 +47,24 @@ export class VoiceRecognitionService {
   //}
 
   start() {
+    this.isStoppedSpeechRecog = false;
     this.recognition.start();
     console.log("Speech recognition started")
 
-    this.recognition.addEventListener('result', (condition: any) => {
-      this.text = this.tempWords;
+    
+
+    //this.recognition.addEventListener('result', (condition: any) => {
+    //  this.text = this.tempWords
+    //});
+      
+    this.recognition.addEventListener('end', (condition: any) => {
+      if (this.isStoppedSpeechRecog) {
+        this.recognition.stop();
+        console.log("End speech recognition")
+      } else {
+        this.wordConcat();
+        this.recognition.start();
+      }
     });
 
     //this.interimTranscript();
@@ -58,6 +75,13 @@ export class VoiceRecognitionService {
     //    this.wordConcat()
     //});
   }
+
+  stop() {
+    this.isStoppedSpeechRecog = true;
+    this.recognition.stop();
+    console.log("End speech recognition")
+  }
+
 
   finalTranscript() {
 

@@ -196,7 +196,7 @@ export class SpeechEntryComponent implements OnInit {
     //} catch {
     //  console.log('failure');
     //}
-    
+    this.service.stop();
     var x = "foo"
     console.log(x);
   }

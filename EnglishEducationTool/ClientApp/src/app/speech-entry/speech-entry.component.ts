@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit, ViewChild, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
 import { VoiceRecognitionService } from '../service/voice-recognition.service';
-import { ChatDto } from '../Dto/ChatDto';
+import { ChatDto, FlaggedToken } from '../Dto/ChatDto';
 import { ChatService } from '../service/chat.service';
 //import { BadWordsFilter } from 'bad-words/';
 import BadWordsFilter from 'bad-words';
@@ -102,7 +102,7 @@ export class SpeechEntryComponent implements OnInit {
     this.service.start();
   }
 
-  async sendClick() {
+  sendClick() {
     var inputVal = <ChatDto>{};
     inputVal.userResponse = this.inputFormControl.value;
 
@@ -122,9 +122,13 @@ export class SpeechEntryComponent implements OnInit {
 
       this.messages.push("User: " + inputVal.userResponse); 
 
-      console.log("sent to back-end")
+      console.log("sent to back-end");
 
-      await this.spellCheckJsonParse(inputVal);
+      // receives JSON data and turns to FlaggedToken object
+      this.chatService.broadcastMessage(inputVal).subscribe((data: ChatDto) => {
+        this.spellCheckObject(data.flaggedTokens);
+
+      });
 
       this.inputFormControl.reset("");
 
@@ -134,16 +138,13 @@ export class SpeechEntryComponent implements OnInit {
 
   // todo: DO THIS FIRST, can received json data, but need to do something with it. can only receive atm
   // possibly callibrate sync and await use, dont understand if its being used properly
-  async spellCheckJsonParse(input: ChatDto) {
-    var foo2;
-    this.chatService.broadcastMessage(input).subscribe((data: ChatDto) => {
-      foo2 = data.flaggedTokens
-      console.log("foo2 in subscribe: " + foo2);
-      console.log("data in subscribe: " + data);
-      console.log("data flaggedToken in subscribe: " + data.flaggedTokens);
-    });
+  spellCheckObject(flaggedCorrection: FlaggedToken[]){
+    console.log("inside the FlaggedToken object inferencer");
 
-    console.log(foo2);
+
+
+    console.log(flaggedCorrection);
+
   }
 
   closeWarning() {

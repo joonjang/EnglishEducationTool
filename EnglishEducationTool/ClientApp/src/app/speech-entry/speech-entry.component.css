@@ -91,6 +91,11 @@ mat-drawer{
     text-decoration: none;
 }
 
+mat-panel-title {
+  justify-content: space-between;
+  align-items: center;
+}
+
 .description-container p{
     margin-left:10px;
 }

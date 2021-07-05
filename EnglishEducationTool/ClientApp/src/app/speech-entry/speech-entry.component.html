@@ -1,56 +1,81 @@
 <mat-drawer-container class="drawer-container">
 
   <mat-drawer mode="side" opened disableClose>
+    <mat-accordion multi="true">
+      <div class="definition-container">
 
-    <div class="definition-container">
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Dictionary
+            </mat-panel-title>
+            <mat-panel-description>
+              <mat-form-field appearance="fill">
+                <mat-label>Language</mat-label>
+                <select matNativeControl>
+                  <option value="english">English</option>
+                  <option value="korean">한글</option>
+                  <option value="french">French</option>
+                </select>
+              </mat-form-field>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <mat-form-field appearance="outline">
+            <mat-label>Search a word</mat-label>
+            <input matInput
+                   placeholder="Search..."
+                   type="text"
+                   autocomplete="off"
+                   [formControl]="searchFormControl">
+            <button mat-button
+                    matSuffix
+                    (click)="getDefinition()">
+              <mat-icon>search</mat-icon>
+            </button>
+          </mat-form-field>
 
-      <h1>Dictionary [Language]</h1>
 
-      <mat-form-field appearance="outline">
-        <mat-label>Search a word</mat-label>
-        <input matInput
-               placeholder="Search..."
-               type="text"
-               autocomplete="off"
-               [formControl]="searchFormControl">
-        <button mat-button
-                matSuffix
-                (click)="getDefinition()">
-        <mat-icon >search</mat-icon>
-        </button>
-      </mat-form-field>
+          <div *ngIf="dicObj[0].word != ''">
+            <div class="inline-container">
 
-      <div *ngIf="dicObj[0].word != ''">
-        <div class="inline-container">
-          
-          <button mat-button
-                  (click)="playAudio()">
-            <mat-icon>volume_up</mat-icon>
-          </button>
+              <button mat-button
+                      (click)="playAudio()">
+                <mat-icon>volume_up</mat-icon>
+              </button>
 
-          <div id="dic-word">
-            <h2><strong>{{ dicObj[0].word }}</strong></h2>
-            <h4>{{ dicObj[0].phonetics[0].text }}</h4>
+              <div id="dic-word">
+                <h2><strong>{{ dicObj[0].word }}</strong></h2>
+                <h4>{{ dicObj[0].phonetics[0].text }}</h4>
+              </div>
+            </div>
+            <div class="description-container"
+                 *ngFor="let dicMeaning of dicObj[0].meanings">
+              <h4><i>{{ dicMeaning.partOfSpeech }}</i></h4>
+              <p style="margin-bottom: 0;"> {{ dicMeaning.definitions[0].definition }}</p>
+              <p style="color: gray;" *ngIf="dicMeaning.definitions[0].example != null"> "{{ dicMeaning.definitions[0].example }}" </p>
+            </div>
           </div>
-        </div>
-        <div class="description-container"
-             *ngFor="let dicMeaning of dicObj[0].meanings">
-          <h4><i>{{ dicMeaning.partOfSpeech }}</i></h4>
-          <p style="margin-bottom: 0;"> {{ dicMeaning.definitions[0].definition }}</p>
-          <p style="color: gray;" *ngIf="dicMeaning.definitions[0].example != null"> "{{ dicMeaning.definitions[0].example }}" </p>
-        </div>
+
+        </mat-expansion-panel>
+
       </div>
-    </div>
 
-    <br />
-    <mat-divider></mat-divider>
-    <br />
 
-    <div class="spellcheck-container">
-      <h1>Spell Check</h1>
-      <p>{{ wordToProof }}</p>
-    </div>
-                                  
+
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Spell Check
+          </mat-panel-title>
+          <mat-panel-description>
+            [#]
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <div class="spellcheck-container">
+          <p>{{ wordToProof }}</p>
+        </div>
+      </mat-expansion-panel>
+      </mat-accordion>
   </mat-drawer>
 
   <mat-drawer-content>

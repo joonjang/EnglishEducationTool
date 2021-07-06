@@ -20,6 +20,34 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
   }
 }
 
+const ELEMENT_DATA: FlaggedToken[] = [
+  {
+    offset: 0,
+    token: "Hollo",
+    type: "UnknownToken",
+    suggestions: [
+      {
+        suggestion: "Hello",
+        score: 0.8502965392240266
+      },
+      {
+        suggestion: "Hollow",
+        score: 0.6217967251270513
+      }
+    ]
+  },
+  {
+    offset: 7,
+    token: "wrld",
+    type: "UnknownToken",
+    suggestions: [
+      {
+        suggestion: "world",
+        score: 0.8502965392240266
+      }
+    ]
+  }
+];
 
 @Component({
   selector: 'app-speech-entry',
@@ -27,6 +55,9 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
   styleUrls: ['./speech-entry.component.css'],
   providers: [VoiceRecognitionService]
 })
+
+
+
 
 export class SpeechEntryComponent implements OnInit {
 
@@ -50,6 +81,10 @@ export class SpeechEntryComponent implements OnInit {
 
   inputCount = this.inputFormControl.value.length;
   matcher = new MyErrorStateMatcher();
+
+  displayedColumns: string[] = ['word', 'suggestions'];
+  dataSource = ELEMENT_DATA;
+
 
  
   public dicObj: RootDictionary[] = [{

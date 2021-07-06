@@ -105,3 +105,6 @@ mat-panel-title {
     margin-bottom:0;
 }
 
+table {
+  width: 100%;
+}

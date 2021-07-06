@@ -26,17 +26,36 @@ export class VoiceRecognitionService {
     this.recognition.interimResults = true;
     this.recognition.lang = 'en-US';
 
+    //this.textObs = Observable.create((obs: any) => {
+    //  this.recognition.onresult = ((e: any) => {
+    //    const transcript = Array.from(e.results)
+    //      .map((result: any) => result[0])
+    //      .map((result) => result.transcript)
+    //      .join('')
+    //    obs.next(transcript)
+    //    //this.tempWords = transcript;
+    //    console.log(transcript);
+    //  });
+    //})
     this.textObs = Observable.create((obs: any) => {
-      this.recognition.onresult = ((e: any) => {
+
+      this.recognition.addEventListener('result', (e: any) => {
         const transcript = Array.from(e.results)
           .map((result: any) => result[0])
           .map((result) => result.transcript)
-          .join('')
-        obs.next(transcript)
-        //this.tempWords = transcript;
-        console.log(transcript);
+          .join('');
+        this.tempWords = transcript;
+        console.log("transcript: " + transcript);
+        console.log("this.text : " + this.text);
+
+        //this.wordConcat();
+        obs.next(this.text + " " + this.tempWords);
       });
-    })
+
+      //this.wordConcat();
+      //obs.next(this.text);
+    });
+
     
   }
 
@@ -83,27 +102,27 @@ export class VoiceRecognitionService {
   }
 
 
-  finalTranscript() {
+  //finalTranscript() {
 
-    //this.recognition.addEventListener('result', (condition: any) => {
-    this.recognition.addEventListener('end', (condition: any) => {
-      this.wordConcat()
-    });
-  }
+  //  //this.recognition.addEventListener('result', (condition: any) => {
+  //  this.recognition.addEventListener('end', (condition: any) => {
+  //    this.wordConcat()
+  //  });
+  //}
 
-  interimTranscript() {
+  //interimTranscript() {
     
-    this.recognition.addEventListener('result', (condition: any) => {
-      this.wordConcat()
-    });
-  }
+  //  this.recognition.addEventListener('result', (condition: any) => {
+  //    this.wordConcat()
+  //  });
+  //}
   
 
   wordConcat() {
 
-    //this.text = this.text + ' ' + this.tempWords + '.';
-    this.text = this.tempWords + '.';
+    this.text = this.text + ' ' + this.tempWords + '.';
+    //this.text = this.tempWords + '.';
     this.tempWords = '';
-    
+
   }
 }

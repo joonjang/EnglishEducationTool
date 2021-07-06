@@ -127,9 +127,8 @@ namespace EnglishEducationTool.Controllers
 
         async Task<FlaggedToken[]> MockProofing(string userChatInput)
         {
-            //  "Hollo, wrld!"
-            string contentString = "{\"_type\": \"SpellCheck\", \"flaggedTokens\": [{\"offset\": 0, \"token\": \"Hollo\", \"type\": \"UnknownToken\", \"suggestions\": [{\"suggestion\": \"Hello\", \"score\": 0.9124109442175475}, {\"suggestion\": \"Hollow\", \"score\": 0.7889023543711866}]}, {\"offset\": 7, \"token\": \"wrld\", \"type\": \"UnknownToken\", \"suggestions\": [{\"suggestion\": \"world\", \"score\": 0.9124109442175475}]}]}";
-
+            //  "Hollo, wrld! I am eaten a apple"
+            string contentString = "{\"_type\": \"SpellCheck\", \"flaggedTokens\": [{\"offset\": 0, \"token\": \"Hollo\", \"type\": \"UnknownToken\", \"suggestions\": [{\"suggestion\": \"Hello\", \"score\": 0.8502965392240266}, {\"suggestion\": \"Hollow\", \"score\": 0.6217967251270513}]}, {\"offset\": 7, \"token\": \"wrld\", \"type\": \"UnknownToken\", \"suggestions\": [{\"suggestion\": \"world\", \"score\": 0.8502965392240266}]}, {\"offset\": 18, \"token\": \"eaten\", \"type\": \"UnknownToken\", \"suggestions\": [{\"suggestion\": \"eating\", \"score\": 0.8502965392240266}]}]}";
             //mock json data for contentString:
             // "Hollo, wrld!"
             // "{\"_type\": \"SpellCheck\", \"flaggedTokens\": [{\"offset\": 0, \"token\": \"Hollo\", \"type\": \"UnknownToken\", \"suggestions\": [{\"suggestion\": \"Hello\", \"score\": 0.9124109442175475}, {\"suggestion\": \"Hollow\", \"score\": 0.7889023543711866}]}, {\"offset\": 7, \"token\": \"wrld\", \"type\": \"UnknownToken\", \"suggestions\": [{\"suggestion\": \"world\", \"score\": 0.9124109442175475}]}]}"

@@ -115,7 +115,7 @@ export class SpeechEntryComponent implements OnInit {
       //user input to search in live production version
       //this.wordToProof = this.inputFormControl.value;
       //todo:D debug string input used to correct spelling
-      this.wordToProof = "Hollo, wrld!"
+      this.wordToProof = "Hollo, wrld! I am eaten a apple"
       //TODO: HYPERLINK THE USER INPUT WITH JSON INFO OF CORRECTED SPELLING AND HOW MANY TOKEN
       // SUGGESTIONS HAVE BEEN RECEIVED
      
@@ -158,6 +158,7 @@ export class SpeechEntryComponent implements OnInit {
     let defineWord =  this.searchFormControl.value;
 
     // todo:D debugging with mock data
+    //  "Hollo, wrld! I am eaten a apple"
     this.dictionaryService.getMockWord(defineWord).subscribe(data => {
       this.dicObj = data;
       console.log(this.dicObj);

@@ -134,7 +134,8 @@ export class SpeechEntryComponent implements OnInit {
   }
 
   startService() {
-    this.service.start();
+    // TODO:D! make the service text equal to form control once dirty
+    this.service.start(this.inputFormControl.value);
   }
 
   sendClick() {
@@ -166,7 +167,7 @@ export class SpeechEntryComponent implements OnInit {
       });
 
       this.inputFormControl.reset("");
-
+      this.service.stop(this.inputFormControl.value);
       
     }
   }
@@ -232,7 +233,7 @@ export class SpeechEntryComponent implements OnInit {
     //} catch {
     //  console.log('failure');
     //}
-    this.service.stop();
+    this.service.stop(this.inputFormControl.value);
     var x = "foo"
     console.log(x);
   }

@@ -65,7 +65,10 @@ export class VoiceRecognitionService {
   //  })
   //}
 
-  start() {
+  start(formControlInput: string) {
+    // TODO:D! make the service text equal to form control once dirty
+    this.text = formControlInput;
+
     this.isStoppedSpeechRecog = false;
     this.recognition.start();
     console.log("Speech recognition started")
@@ -95,7 +98,10 @@ export class VoiceRecognitionService {
     //});
   }
 
-  stop() {
+  stop(formControlInput: string) {
+    // TODO:D! make the service text equal to form control once dirty
+    this.text = formControlInput;
+
     this.isStoppedSpeechRecog = true;
     this.recognition.stop();
     console.log("End speech recognition")

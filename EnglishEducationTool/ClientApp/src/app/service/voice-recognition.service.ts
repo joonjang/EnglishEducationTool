@@ -65,6 +65,10 @@ export class VoiceRecognitionService {
   //  })
   //}
 
+  //updateText(formControlInput: string) {
+  //  this.text = this.text + formControlInput;
+  //}
+
   start(formControlInput: string) {
     // TODO:D! make the service text equal to form control once dirty
     this.text = formControlInput;

@@ -144,7 +144,8 @@
                          [errorStateMatcher]="matcher"
                         cdkTextareaAutosize
                         #autosize="cdkTextareaAutosize"
-                        cdkAutosizeMinRows="1"></textarea>
+                        cdkAutosizeMinRows="1"
+                        (input)="this.service.stop(this.inputFormControl.value)"></textarea>
               <!--value={{service.text}}-->
 
               <mat-error *ngIf="inputFormControl.hasError('required')">

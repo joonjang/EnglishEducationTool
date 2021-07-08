@@ -211,6 +211,10 @@ export class SpeechEntryComponent implements OnInit {
 
   }
 
+  //updateVoiceText() {
+  //  this.service.updateText(this.searchFormControl.value);
+  //}
+
   playAudio() {
     let audio = new Audio();
     audio.src = this.dicObj[0].phonetics[0].audio;

@@ -68,7 +68,7 @@ export class SpeechEntryComponent implements OnInit {
 
   filter = new BadWordsFilter();
   badwordWarning: Boolean = false;
-  wordToProof = "...";
+  wordToProof = "";
   
   inputFormControl = new FormControl('', [
     Validators.required,
@@ -144,9 +144,9 @@ export class SpeechEntryComponent implements OnInit {
 
       this.messages.push("User: " + inputVal.userResponse); 
 
-      console.log("sent to back-end");
 
       // receives JSON data and turns to FlaggedToken object
+      //TODO:!!! spell checking toggle
       this.chatService.broadcastMessage(inputVal).subscribe((data: ChatDto) => {
         if (data.flaggedTokens.length > 0) {
           this.spellCheckObject(data.flaggedTokens);

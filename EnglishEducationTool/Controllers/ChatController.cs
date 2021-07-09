@@ -21,7 +21,6 @@ namespace EnglishEducationTool.Controllers
         [HttpGet]
         public IEnumerable<string> Get()
         {
-
             return new string[] { "value1", "value2" };
         }
 
@@ -32,25 +31,26 @@ namespace EnglishEducationTool.Controllers
         {
             // TODO:  OpenAI chat response implementation
 
-            FlaggedToken[] userProof;
+            FlaggedToken[] userProof = Array.Empty<FlaggedToken>();
 
-            //// microsoft SpellCheck API
-            //try
-            //{
-            //    userProof = await Proofing(chatVal.UserResponse);
-            //}
-            //catch (Exception e)
-            //{
-
-            //    Console.WriteLine(e);
-            //}
+            // microsoft SpellCheck API
+            try
+            {
+                userProof = await Proofing(chatVal.UserResponse);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            };
 
             //// todo:D mock method to not overuse 3rd party server
-            userProof = await MockProofing(chatVal.UserResponse);
+            //userProof = await MockProofing(chatVal.UserResponse);
 
-            return new ChatDto {
+            return new ChatDto
+            {
                 FlaggedTokens = userProof,
-                BotResponse = "HELLO WORLD [OPEN AI RESPONSE]" };
+                BotResponse = "HELLO WORLD [OPEN AI RESPONSE]"
+            };
         }
 
         #region SpellCheck API
@@ -61,8 +61,8 @@ namespace EnglishEducationTool.Controllers
         //static string endpoint = Environment.GetEnvironmentVariable("BING_AUTOSUGGEST_ENDPOINT");
 
         //TODO: add secure environment variable for key
-        static string subscriptionKey = "!934735cb1077416da4d4f3dce8a0d570";
-        static string endpoint = "!https://api.bing.microsoft.com/";
+        static string subscriptionKey = "934735cb1077416da4d4f3dce8a0d570";
+        static string endpoint = "https://api.bing.microsoft.com/";
 
         static string path = "/v7.0/spellcheck?";
 
@@ -77,7 +77,7 @@ namespace EnglishEducationTool.Controllers
         // static string ClientIp = "999.999.999.999";
         // static string ClientLocation = "+90.0000000000000;long: 00.0000000000000;re:100.000000000000";
 
-        async Task<string> Proofing(string userChatInput)
+        async Task<FlaggedToken[]> Proofing(string userChatInput)
         {
             HttpClient client = new HttpClient();
             client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", subscriptionKey);
@@ -120,7 +120,7 @@ namespace EnglishEducationTool.Controllers
             // "{\"_type\": \"SpellCheck\", \"flaggedTokens\": [{\"offset\": 21, \"token\": \"they’re\", \"type\": \"UnknownToken\", \"suggestions\": [{\"suggestion\": \"their\", \"score\": 0.8961550966590242}]}]}"
             //Deserialize the JSON response from the API
             SpellCheck jsonObj = JsonConvert.DeserializeObject<SpellCheck>(contentString);
-            return contentString;
+            return jsonObj.FlaggedTokens;
         }
 
         #endregion

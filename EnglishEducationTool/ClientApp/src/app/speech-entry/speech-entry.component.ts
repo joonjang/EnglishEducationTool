@@ -20,34 +20,17 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
   }
 }
 
-const ELEMENT_DATA: FlaggedToken[] = [
-  {
-    offset: 0,
-    token: "Hollo",
-    type: "UnknownToken",
-    suggestions: [
-      {
-        suggestion: "Hello",
-        score: 0.8502965392240266
-      },
-      {
-        suggestion: "Hollow",
-        score: 0.6217967251270513
-      }
-    ]
-  },
-  {
-    offset: 7,
-    token: "wrld",
-    type: "UnknownToken",
-    suggestions: [
-      {
-        suggestion: "world",
-        score: 0.8502965392240266
-      }
-    ]
-  }
-];
+const EMPTY_SPELLCHECK = [{
+  offset: 0,
+  token: "-",
+  type: "",
+  suggestions: [
+    {
+      suggestionSuggestion: "-",
+      score: 0
+    }
+  ]
+}];
 
 @Component({
   selector: 'app-speech-entry',
@@ -69,7 +52,7 @@ export class SpeechEntryComponent implements OnInit {
 
   filter = new BadWordsFilter();
   badwordWarning: Boolean = false;
-  wordToProof = "";
+  wordToProof = "...";
   
   inputFormControl = new FormControl('', [
     Validators.required,
@@ -83,17 +66,7 @@ export class SpeechEntryComponent implements OnInit {
   matcher = new MyErrorStateMatcher();
 
   displayedColumns: string[] = ['word', 'suggestions'];
-  dataSource = [{
-    offset: 0,
-    token: "-",
-    type: "",
-    suggestions: [
-      {
-        suggestion: "-",
-        score: 0
-      }
-    ]
-  }];
+  dataSource = EMPTY_SPELLCHECK;
 
  
   public dicObj: RootDictionary[] = [{
@@ -158,10 +131,12 @@ export class SpeechEntryComponent implements OnInit {
     else {
 
       //user input to search in live production version
-      //this.wordToProof = this.inputFormControl.value;
-      //todo:D debug string input used to correct spelling
-      this.wordToProof = "Hollo, wrld! I am eaten a apple"
-      //TODO: HYPERLINK THE USER INPUT WITH JSON INFO OF CORRECTED SPELLING AND HOW MANY TOKEN
+      this.wordToProof = this.inputFormControl.value;
+
+      ////todo:D debug string input used to correct spelling
+      //this.wordToProof = "Hollo, wrld! I am eaten a apple"
+
+      //BACKLOG: HYPERLINK THE USER INPUT WITH JSON INFO OF CORRECTED SPELLING AND HOW MANY TOKEN
       // SUGGESTIONS HAVE BEEN RECEIVED
      
 
@@ -171,12 +146,12 @@ export class SpeechEntryComponent implements OnInit {
 
       // receives JSON data and turns to FlaggedToken object
       this.chatService.broadcastMessage(inputVal).subscribe((data: ChatDto) => {
-        this.spellCheckObject(data.flaggedTokens);
-
+        if (data.flaggedTokens.length > 0) {
+          this.spellCheckObject(data.flaggedTokens);
+        } else {
+          this.dataSource = EMPTY_SPELLCHECK
+        }
       });
-
-      //todo:D mock json data used
-      this.dataSource = ELEMENT_DATA;
 
       this.inputFormControl.reset("");
       this.service.stop(this.inputFormControl.value);
@@ -184,11 +159,14 @@ export class SpeechEntryComponent implements OnInit {
     }
   }
 
-  // todo: can received json data, but need to do something with it. can only receive atm
+  //todo:D mock json data used
+  // DONE: can received json data, but need to do something with it. can only receive atm
   // possibly callibrate sync and await use, dont understand if its being used properly
   spellCheckObject(flaggedCorrection: FlaggedToken[]){
     console.log("inside the FlaggedToken object inferencer");
     console.log(flaggedCorrection);
+
+    this.dataSource = flaggedCorrection;
   }
 
   closeWarning() {
@@ -203,18 +181,18 @@ export class SpeechEntryComponent implements OnInit {
 
     // todo:D debugging with mock data
     //  "Hollo, wrld! I am eaten a apple"
-    this.dictionaryService.getMockWord(defineWord).subscribe(data => {
-      this.dicObj = data;
-      console.log(this.dicObj);
-    }, error => console.log(error));
+    //this.dictionaryService.getMockWord(defineWord).subscribe(data => {
+    //  this.dicObj = data;
+    //  console.log(this.dicObj);
+    //}, error => console.log(error));
 
     //// microsoft dictionary API
-    //if (defineWord != "") {
-    //  this.dictionaryService.getWord(defineWord).subscribe(data => {
-    //    this.dicObj = data;
-    //    console.log(this.dicObj);
-    //  }, error => console.log(error));
-    //}
+    if (defineWord != "") {
+      this.dictionaryService.getWord(defineWord).subscribe(data => {
+        this.dicObj = data;
+        console.log(this.dicObj);
+      }, error => console.log(error));
+    }
 
   }
 

@@ -16,9 +16,9 @@
           </mat-panel-description>
         </mat-expansion-panel-header>
         <div class="spellcheck-container">
-          <div *ngIf="dataSource[0].token != '-'; else elseBlockDescrip">
+
             <p>Entry: {{ wordToProof }}</p>
-          </div>
+
           <ng-template #elseBlockDescrip></ng-template>
           <table mat-table [dataSource]="dataSource" class="mat-elevation-z1" *ngIf="dataSource[0].token != ''">
 
@@ -39,7 +39,7 @@
                   <ng-container *ngFor="let item of element.suggestions">
                     <div>
                       <span>
-                        {{ item.suggestion }}
+                        {{ item.suggestionSuggestion }}
                       </span>
                     </div>
                   </ng-container>

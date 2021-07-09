@@ -12,6 +12,6 @@ export interface FlaggedToken {
 }
 
 export interface Suggestion {
-  suggestion: string;
+  suggestionSuggestion: string;
   score: number;
 }

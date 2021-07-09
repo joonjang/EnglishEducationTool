@@ -70,7 +70,7 @@ export class VoiceRecognitionService {
   //}
 
   start(formControlInput: string) {
-    // TODO:D! make the service text equal to form control once dirty
+    // DONE:D! make the service text equal to form control once dirty
     this.text = formControlInput;
 
     this.isStoppedSpeechRecog = false;
@@ -103,7 +103,7 @@ export class VoiceRecognitionService {
   }
 
   stop(formControlInput: string) {
-    // TODO:D! make the service text equal to form control once dirty
+    // DONE:D! make the service text equal to form control once dirty
     this.text = formControlInput;
 
     this.isStoppedSpeechRecog = true;
@@ -130,7 +130,7 @@ export class VoiceRecognitionService {
 
   wordConcat() {
 
-    this.text = this.text + ' ' + this.tempWords + '.';
+    this.text = this.text + ' ' + this.tempWords;
     //this.text = this.tempWords + '.';
     this.tempWords = '';
 

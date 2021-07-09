@@ -69,7 +69,7 @@ export class SpeechEntryComponent implements OnInit {
 
   filter = new BadWordsFilter();
   badwordWarning: Boolean = false;
-  wordToProof = "HELLO JOON I LOVE YOU";
+  wordToProof = "";
   
   inputFormControl = new FormControl('', [
     Validators.required,
@@ -83,8 +83,17 @@ export class SpeechEntryComponent implements OnInit {
   matcher = new MyErrorStateMatcher();
 
   displayedColumns: string[] = ['word', 'suggestions'];
-  dataSource = ELEMENT_DATA;
-
+  dataSource = [{
+    offset: 0,
+    token: "-",
+    type: "",
+    suggestions: [
+      {
+        suggestion: "-",
+        score: 0
+      }
+    ]
+  }];
 
  
   public dicObj: RootDictionary[] = [{
@@ -134,7 +143,7 @@ export class SpeechEntryComponent implements OnInit {
   }
 
   startService() {
-    // TODO:D! make the service text equal to form control once dirty
+    // DONE:D! make the service text equal to form control once dirty
     this.service.start(this.inputFormControl.value);
   }
 
@@ -166,28 +175,27 @@ export class SpeechEntryComponent implements OnInit {
 
       });
 
+      //todo:D mock json data used
+      this.dataSource = ELEMENT_DATA;
+
       this.inputFormControl.reset("");
       this.service.stop(this.inputFormControl.value);
       
     }
   }
 
-  // todo: DO THIS FIRST, can received json data, but need to do something with it. can only receive atm
+  // todo: can received json data, but need to do something with it. can only receive atm
   // possibly callibrate sync and await use, dont understand if its being used properly
   spellCheckObject(flaggedCorrection: FlaggedToken[]){
     console.log("inside the FlaggedToken object inferencer");
-
-
-
     console.log(flaggedCorrection);
-
   }
 
   closeWarning() {
     this.badwordWarning = false;
   }
 
-  ///// TODO: implement dictionary API service so the component doesnt know the logic, only exposed to methods
+  ///// DONE: implement dictionary API service so the component doesnt know the logic, only exposed to methods
 
   getDefinition() {
 
@@ -200,7 +208,6 @@ export class SpeechEntryComponent implements OnInit {
       console.log(this.dicObj);
     }, error => console.log(error));
 
-    ////TODO: mispelled word 
     //// microsoft dictionary API
     //if (defineWord != "") {
     //  this.dictionaryService.getWord(defineWord).subscribe(data => {
@@ -211,10 +218,6 @@ export class SpeechEntryComponent implements OnInit {
 
   }
 
-  //updateVoiceText() {
-  //  this.service.updateText(this.searchFormControl.value);
-  //}
-
   playAudio() {
     let audio = new Audio();
     audio.src = this.dicObj[0].phonetics[0].audio;
@@ -224,6 +227,7 @@ export class SpeechEntryComponent implements OnInit {
 
   ////foooooooooooo (fighters)
 
+  //todo: stop listening button for voice recognition
   fooFunc() {
     //this.messages.push("User: Hello", "AI: Hello");
     //this.searchFormControl.setValue("test");

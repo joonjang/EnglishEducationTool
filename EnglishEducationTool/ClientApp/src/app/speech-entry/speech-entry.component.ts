@@ -32,6 +32,22 @@ const EMPTY_SPELLCHECK = [{
   ]
 }];
 
+const EMPTY_DIC = [{
+  word: "",
+  phonetics: [{
+    text: "",
+    audio: ""
+  }],
+  meanings: [{
+    partOfSpeech: "",
+    definitions: [{
+      definition: "",
+      synonyms: [""],
+      example: ""
+    }]
+  }]
+}];
+
 @Component({
   selector: 'app-speech-entry',
   templateUrl: './speech-entry.component.html',
@@ -69,21 +85,7 @@ export class SpeechEntryComponent implements OnInit {
   dataSource = EMPTY_SPELLCHECK;
 
  
-  public dicObj: RootDictionary[] = [{
-        word: "",
-        phonetics: [{
-          text: "",
-          audio: ""
-        }],
-        meanings: [{
-          partOfSpeech: "",
-          definitions: [{
-            definition: "",
-            synonyms: [""],
-            example: ""
-          }]
-        }]
-      }];
+  public dicObj: RootDictionary[] = EMPTY_DIC;
 
   constructor(
     public service: VoiceRecognitionService,
@@ -159,7 +161,6 @@ export class SpeechEntryComponent implements OnInit {
     }
   }
 
-  //todo:D mock json data used
   // DONE: can received json data, but need to do something with it. can only receive atm
   // possibly callibrate sync and await use, dont understand if its being used properly
   spellCheckObject(flaggedCorrection: FlaggedToken[]){
@@ -179,7 +180,7 @@ export class SpeechEntryComponent implements OnInit {
 
     let defineWord =  this.searchFormControl.value;
 
-    // todo:D debugging with mock data
+    // todo:D debugging with mock data definition
     //  "Hollo, wrld! I am eaten a apple"
     //this.dictionaryService.getMockWord(defineWord).subscribe(data => {
     //  this.dicObj = data;
@@ -191,7 +192,10 @@ export class SpeechEntryComponent implements OnInit {
       this.dictionaryService.getWord(defineWord).subscribe(data => {
         this.dicObj = data;
         console.log(this.dicObj);
-      }, error => console.log(error));
+      }, error => {
+        console.log(error);
+        this.dicObj = EMPTY_DIC;
+    })
     }
 
   }

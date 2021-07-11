@@ -69,6 +69,8 @@ export class SpeechEntryComponent implements OnInit {
   filter = new BadWordsFilter();
   badwordWarning: Boolean = false;
   wordToProof = "";
+
+  spellToggleControl = new FormControl();
   
   inputFormControl = new FormControl('', [
     Validators.required,
@@ -131,22 +133,32 @@ export class SpeechEntryComponent implements OnInit {
       this.badwordWarning = true;
     }
     else {
-
-      //user input to search in live production version
-      this.wordToProof = this.inputFormControl.value;
-
       ////todo:D debug string input used to correct spelling
       //this.wordToProof = "Hollo, wrld! I am eaten a apple"
 
       //BACKLOG: HYPERLINK THE USER INPUT WITH JSON INFO OF CORRECTED SPELLING AND HOW MANY TOKEN
       // SUGGESTIONS HAVE BEEN RECEIVED
-     
 
       this.messages.push("User: " + inputVal.userResponse); 
+      this.inputFormControl.reset("");
+      this.service.stop(this.inputFormControl.value);
+    }
+  }
 
+  spellCheckFunc() {
+    var inputVal = <ChatDto>{};
+    inputVal.userResponse = this.inputFormControl.value;
 
+    if (this.filter.isProfane(inputVal.userResponse)) {
+      console.log("bad word detected")
+      this.badwordWarning = true;
+    }
+    else {
       // receives JSON data and turns to FlaggedToken object
       //TODO:!!! spell checking toggle
+      //user input to search in live production version
+      this.wordToProof = this.inputFormControl.value;
+
       this.chatService.broadcastMessage(inputVal).subscribe((data: ChatDto) => {
         if (data.flaggedTokens.length > 0) {
           this.spellCheckObject(data.flaggedTokens);
@@ -155,9 +167,7 @@ export class SpeechEntryComponent implements OnInit {
         }
       });
 
-      this.inputFormControl.reset("");
       this.service.stop(this.inputFormControl.value);
-      
     }
   }
 

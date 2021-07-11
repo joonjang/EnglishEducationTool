@@ -170,7 +170,6 @@
 
           <div *ngIf="dicObj[0].word != ''">
             <div class="inline-container">
-
               <button mat-button
                       (click)="playAudio()">
                 <mat-icon>volume_up</mat-icon>
@@ -182,13 +181,16 @@
               </div>
             </div>
 
-            <div class="description-container"
-                 *ngFor="let dicMeaning of dicObj[0].meanings">
-              <h4><i>{{ dicMeaning.partOfSpeech }}</i></h4>
-              <p style="margin-bottom: 0;"> {{ dicMeaning.definitions[0].definition }}</p>
-              <p style="color: gray;" *ngIf="dicMeaning.definitions[0].example != null"> "{{ dicMeaning.definitions[0].example }}" </p>
-            </div>
+            <ng-container *ngFor="let dicItem of dicObj">
+              <div class="description-container"
+                   *ngFor="let dicMeaning of dicItem.meanings">
+                <h4><i>{{ dicMeaning.partOfSpeech }}</i></h4>
+                <p style="margin-bottom: 0;"> {{ dicMeaning.definitions[0].definition }}</p>
+                <p style="color: gray;" *ngIf="dicMeaning.definitions[0].example != null"> "{{ dicMeaning.definitions[0].example }}" </p>
+              </div>
+            </ng-container>
           </div>
+          
         </mat-expansion-panel>
       </div>
     </mat-accordion>

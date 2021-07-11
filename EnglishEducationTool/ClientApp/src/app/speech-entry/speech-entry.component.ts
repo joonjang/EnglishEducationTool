@@ -77,6 +77,7 @@ export class SpeechEntryComponent implements OnInit {
   displayedColumns: string[] = ['word', 'suggestions'];
   dataSource = EMPTY_SPELLCHECK;
   dicObj: RootDictionary[] = EMPTY_DIC;
+  languageFormControl = new FormControl();
 
   constructor(
     public service: VoiceRecognitionService,

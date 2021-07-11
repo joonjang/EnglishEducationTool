@@ -55,9 +55,6 @@ const EMPTY_DIC = [{
   providers: [VoiceRecognitionService]
 })
 
-
-
-
 export class SpeechEntryComponent implements OnInit {
 
   messages =
@@ -65,29 +62,21 @@ export class SpeechEntryComponent implements OnInit {
       "User: Hello",
       "AI: Hello",
     ];
-
   filter = new BadWordsFilter();
   badwordWarning: Boolean = false;
   wordToProof = "";
-
   spellToggleControl = new FormControl();
-  
   inputFormControl = new FormControl('', [
     Validators.required,
     Validators.maxLength(140),
     //maxLength in: ChatDto.cs, speech-entry component html and typescript
   ]);
-
   searchFormControl = new FormControl('', []);
-
   inputCount = this.inputFormControl.value.length;
   matcher = new MyErrorStateMatcher();
-
   displayedColumns: string[] = ['word', 'suggestions'];
   dataSource = EMPTY_SPELLCHECK;
-
- 
-  public dicObj: RootDictionary[] = EMPTY_DIC;
+  dicObj: RootDictionary[] = EMPTY_DIC;
 
   constructor(
     public service: VoiceRecognitionService,
@@ -97,19 +86,15 @@ export class SpeechEntryComponent implements OnInit {
     private _ngZone: NgZone
   ) {
     this.service.init();
-
     this.service.textObs.subscribe((e: string) => {
       this.inputFormControl.setValue(e);
       this.inputFormControl.markAsDirty();
     })
-
   }
 
   ngOnInit(): void {
     this.getDefinition();
   }
-
-  
 
   @ViewChild('autosize') autosize!: CdkTextareaAutosize;
 
@@ -155,10 +140,9 @@ export class SpeechEntryComponent implements OnInit {
     }
     else {
       // receives JSON data and turns to FlaggedToken object
-      //TODO:!!! spell checking toggle
+      //DONE:!!! spell checking toggle
       //user input to search in live production version
       this.wordToProof = this.inputFormControl.value;
-
       this.chatService.broadcastMessage(inputVal).subscribe((data: ChatDto) => {
         if (data.flaggedTokens.length > 0) {
           this.spellCheckObject(data.flaggedTokens);
@@ -166,7 +150,6 @@ export class SpeechEntryComponent implements OnInit {
           this.dataSource = EMPTY_SPELLCHECK
         }
       });
-
       this.service.stop(this.inputFormControl.value);
     }
   }
@@ -176,7 +159,6 @@ export class SpeechEntryComponent implements OnInit {
   spellCheckObject(flaggedCorrection: FlaggedToken[]){
     console.log("inside the FlaggedToken object inferencer");
     console.log(flaggedCorrection);
-
     this.dataSource = flaggedCorrection;
   }
 
@@ -185,11 +167,8 @@ export class SpeechEntryComponent implements OnInit {
   }
 
   ///// DONE: implement dictionary API service so the component doesnt know the logic, only exposed to methods
-
   getDefinition() {
-
     let defineWord =  this.searchFormControl.value;
-
     // todo:D debugging with mock data definition
     //  "Hollo, wrld! I am eaten a apple"
     //this.dictionaryService.getMockWord(defineWord).subscribe(data => {
@@ -207,7 +186,6 @@ export class SpeechEntryComponent implements OnInit {
         this.dicObj = EMPTY_DIC;
     })
     }
-
   }
 
   playAudio() {
@@ -217,26 +195,9 @@ export class SpeechEntryComponent implements OnInit {
     audio.play();
   }
 
-  ////foooooooooooo (fighters)
-
-  //todo: stop listening button for voice recognition
-  fooFunc() {
-    //this.messages.push("User: Hello", "AI: Hello");
-    //this.searchFormControl.setValue("test");
-
-    //try {
-    //  var foo = this.getDefinition().subscribe(data => {
-    //    this.dicObject?.meanings = data.meanings;
-    //    this.dicObject?.phonetics = data.phonetics;
-    //    this.dicObject!?.word = data.word;
-    //  });
-    //} catch {
-    //  console.log('failure');
-    //}
+  //DONE: stop listening button for voice recognition
+  stopListening() {
     this.service.stop(this.inputFormControl.value);
-    var x = "foo"
-    console.log(x);
   }
-
 }
 

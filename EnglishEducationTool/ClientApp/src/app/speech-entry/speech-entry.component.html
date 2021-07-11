@@ -2,7 +2,6 @@
 
   <mat-drawer mode="side" opened disableClose position="end">
     <mat-accordion multi="true">
-
       <mat-expansion-panel expanded>
         <mat-expansion-panel-header>
           <mat-panel-title>
@@ -16,12 +15,9 @@
           </mat-panel-description>
         </mat-expansion-panel-header>
         <div class="spellcheck-container">
-
           <p>Entry: {{ wordToProof }}</p>
-
           <ng-template #elseBlockDescrip></ng-template>
           <table mat-table [dataSource]="dataSource" class="mat-elevation-z1" *ngIf="dataSource[0].token != ''">
-
             <!--- Note that these columns can be defined in any order.
           The actual rendered columns are set as a property on the row definition" -->
             <!-- Word Column -->
@@ -29,14 +25,9 @@
               <th mat-header-cell *matHeaderCellDef> Word </th>
               <td mat-cell *matCellDef="let element"> {{element.token}} </td>
             </ng-container>
-
             <!-- Suggestions Column -->
             <ng-container matColumnDef="suggestions">
-              <th mat-header-cell *matHeaderCellDef>lD
- Suggestions
-              </th>
-              lD
-                <!--<td mat-cell *matCellDef="let element"> {{element.suggestions[0].suggestion}} </td>-->
+              <th mat-header-cell *matHeaderCellDef>Suggestions</th>
               <td mat-cell *matCellDef="let element">
                 <div>
                   <ng-container *ngFor="let item of element.suggestions">
@@ -49,22 +40,19 @@
                 </div>
               </td>
             </ng-container>
-
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
           </table>
-
         </div>
       </mat-expansion-panel>
 
       <div class="definition-container">
-
         <mat-expansion-panel expanded>
-
           <mat-expansion-panel-header>
             <mat-panel-title>
               Dictionary
             </mat-panel-title>
+
             <mat-panel-description>
               <mat-form-field appearance="fill">
                 <mat-label>Language</mat-label>
@@ -76,6 +64,7 @@
               </mat-form-field>
             </mat-panel-description>
           </mat-expansion-panel-header>
+
           <mat-form-field appearance="outline">
             <mat-label>Search a word</mat-label>
             <input matInput
@@ -91,7 +80,6 @@
             </button>
           </mat-form-field>
 
-
           <div *ngIf="dicObj[0].word != ''">
             <div class="inline-container">
 
@@ -105,6 +93,7 @@
                 <h4>{{ dicObj[0].phonetics[0].text }}</h4>
               </div>
             </div>
+
             <div class="description-container"
                  *ngFor="let dicMeaning of dicObj[0].meanings">
               <h4><i>{{ dicMeaning.partOfSpeech }}</i></h4>
@@ -120,7 +109,6 @@
   <mat-drawer-content>
     <div class="form-container">
       <div id="form-flex-container">
-
         <!-- Warning Alert -->
         <div class="alert alert-danger alert-dismissible fade show" *ngIf="badwordWarning">
           <strong>Warning!</strong> Please enter a valid input without the use of profanity.
@@ -141,7 +129,6 @@
 
         <div id="input-container">
           <div id="input-flex-container">
-
             <div class="input-button-container">
               <button mat-fab
                       color="accent"
@@ -152,16 +139,13 @@
             <div class="input-button-container">
               <button mat-fab
                       color="basic"
-                      (click)="fooFunc()">
+                      (click)="stopListening()">
                 <mat-icon>stop</mat-icon>
               </button>
             </div>
 
             <mat-form-field id="input-full-width">
-
               <mat-label>Message</mat-label>
-
-
               <textarea type="text"
                         matInput
                         [formControl]="inputFormControl"
@@ -207,5 +191,4 @@
     </div>
 
   </mat-drawer-content>
-
 </mat-drawer-container>

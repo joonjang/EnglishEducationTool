@@ -65,7 +65,6 @@ export class SpeechEntryComponent implements OnInit {
   filter = new BadWordsFilter();
   badwordWarning: Boolean = false;
   wordToProof = "";
-  spellToggleControl = new FormControl();
   inputFormControl = new FormControl('', [
     Validators.required,
     Validators.maxLength(140),
@@ -77,7 +76,7 @@ export class SpeechEntryComponent implements OnInit {
   displayedColumns: string[] = ['word', 'suggestions'];
   dataSource = EMPTY_SPELLCHECK;
   dicObj: RootDictionary[] = EMPTY_DIC;
-  languageFormControl = new FormControl();
+  languageFormControl = new FormControl("en");
 
   constructor(
     public service: VoiceRecognitionService,

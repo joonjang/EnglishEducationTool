@@ -1,15 +1,20 @@
 import { Inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
-import { ChatDto } from '../Dto/ChatDto';
+//import { ChatDto } from '../Dto/ChatDto';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ChatService {
 
-  private receivedMessageObject: ChatDto = { userResponse: "", botResponse: "", flaggedTokens: []};
-  private sharedObj = new Subject<ChatDto>();
+  // service to send user input to back-end to return:
+  // Spell Check Proofing
+  // TODO: OpenAI response
+  // TODO: Content Moderation
+
+export class ChatService {
+  //private receivedMessageObject: ChatDto = { userResponse: "", botResponse: "", flaggedTokens: []};
+  private sharedObj = new Subject<string>();
 
   constructor
   (
@@ -18,11 +23,15 @@ export class ChatService {
   )
   { }
 
-  public broadcastMessage(chatDto: any): Observable<any> {
-    return this.http.post(this.baseUrl + "api/Chat/send", chatDto);
+  public broadcastMessageBotResponse(userInput: any): Observable<any> {
+    return this.http.post(this.baseUrl + "api/Chat/send", userInput);
   }
 
-  public retrieveMappedObject(): Observable<ChatDto> {
+  public broadcastMessageSpellCheck(userInput: any): Observable<any> {
+    return this.http.post(this.baseUrl + "api/Chat/sendSpell", userInput);
+  }
+
+  public retrieveMappedObject(): Observable<string> {
     return this.sharedObj.asObservable();
   }
 }

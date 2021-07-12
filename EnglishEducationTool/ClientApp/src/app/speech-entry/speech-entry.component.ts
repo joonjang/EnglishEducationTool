@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit, ViewChild, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
 import { VoiceRecognitionService } from '../service/voice-recognition.service';
-import {/* ChatDto,*/ FlaggedToken } from '../Dto/ChatDto';
+import { ChatDto, FlaggedToken } from '../Dto/ChatDto';
 import { ChatService } from '../service/chat.service';
 //import { BadWordsFilter } from 'bad-words/';
 import BadWordsFilter from 'bad-words';
@@ -110,50 +110,42 @@ export class SpeechEntryComponent implements OnInit {
   }
 
   sendClick() {
-    var inputVal = <string>{};
-    inputVal = this.inputFormControl.value;
+    var inputVal = <ChatDto>{};
+    inputVal.userResponse = this.inputFormControl.value;
 
-    if (this.filter.isProfane(inputVal)) {
+    if (this.filter.isProfane(inputVal.userResponse)) {
       console.log("bad word detected")
       this.badwordWarning = true;
     }
     else {
-      this.messages.push("User: " + inputVal);
-      this.inputFormControl.reset("");
-      this.service.stop(this.inputFormControl.value);
-
       ////todo:D debug string input used to correct spelling
       //this.wordToProof = "Hollo, wrld! I am eaten a apple"
 
       //BACKLOG: HYPERLINK THE USER INPUT WITH JSON INFO OF CORRECTED SPELLING AND HOW MANY TOKEN
       // SUGGESTIONS HAVE BEEN RECEIVED
 
-      //TODO: The send does not send information to back-end
-      this.chatService.broadcastMessageBotResponse(inputVal).subscribe((data: string) => {
-          // TODO: user message to back-end, should only return OpenAI bot response
-        console.log(data);
-        this.messages.push("AI: " + data);
-      });
+      this.messages.push("User: " + inputVal.userResponse); 
+      this.inputFormControl.reset("");
+      this.service.stop(this.inputFormControl.value);
     }
   }
 
   spellCheckFunc() {
-    var inputVal: string = this.inputFormControl.value;
+    var inputVal = <ChatDto>{};
+    inputVal.userResponse = this.inputFormControl.value;
 
-    if (this.filter.isProfane(inputVal)) {
+    if (this.filter.isProfane(inputVal.userResponse)) {
       console.log("bad word detected")
       this.badwordWarning = true;
     }
     else {
       // receives JSON data and turns to FlaggedToken object
-      //DONE spell checking toggle
+      //DONE:!!! spell checking toggle
       //user input to search in live production version
       this.wordToProof = this.inputFormControl.value;
-      this.chatService.broadcastMessageSpellCheck(inputVal).subscribe((data: FlaggedToken[]) => {
-        if (data.length > 0) {
-          // TODO: spell check back-end, should only return FlaggedToken
-          console.log(data);
-          this.spellCheckObject(data);
+      this.chatService.broadcastMessage(inputVal).subscribe((data: ChatDto) => {
+        if (data.flaggedTokens.length > 0) {
+          this.spellCheckObject(data.flaggedTokens);
         } else {
           this.dataSource = EMPTY_SPELLCHECK
         }
@@ -166,6 +158,7 @@ export class SpeechEntryComponent implements OnInit {
   // possibly callibrate sync and await use, dont understand if its being used properly
   spellCheckObject(flaggedCorrection: FlaggedToken[]){
     console.log("inside the FlaggedToken object inferencer");
+    console.log(flaggedCorrection);
     this.dataSource = flaggedCorrection;
   }
 
@@ -183,7 +176,7 @@ export class SpeechEntryComponent implements OnInit {
     //  console.log(this.dicObj);
     //}, error => console.log(error));
 
-    //// open dictionary API
+    //// microsoft dictionary API
     if (defineWord != "") {
       this.dictionaryService.getWord(defineWord).subscribe(data => {
         this.dicObj = data;

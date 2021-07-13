@@ -110,6 +110,10 @@ export class SpeechEntryComponent implements OnInit {
   }
 
   sendClick() {
+    this.messages.push("User: " + inputVal.userResponse);
+    this.inputFormControl.reset("");
+    this.service.stop(this.inputFormControl.value);
+
     var inputVal = <ChatDto>{};
     inputVal.userResponse = this.inputFormControl.value;
 
@@ -123,10 +127,10 @@ export class SpeechEntryComponent implements OnInit {
 
       //BACKLOG: HYPERLINK THE USER INPUT WITH JSON INFO OF CORRECTED SPELLING AND HOW MANY TOKEN
       // SUGGESTIONS HAVE BEEN RECEIVED
-
-      this.messages.push("User: " + inputVal.userResponse); 
-      this.inputFormControl.reset("");
-      this.service.stop(this.inputFormControl.value);
+      this.chatService.broadcastMessage(inputVal, "Bot").subscribe((data: string) => {
+        console.log(data);
+        this.messages.push("AI: " + data);
+      });
     }
   }
 
@@ -143,12 +147,13 @@ export class SpeechEntryComponent implements OnInit {
       //DONE:!!! spell checking toggle
       //user input to search in live production version
       this.wordToProof = this.inputFormControl.value;
-      this.chatService.broadcastMessage(inputVal).subscribe((data: ChatDto) => {
-        if (data.flaggedTokens.length > 0) {
-          this.spellCheckObject(data.flaggedTokens);
+      this.chatService.broadcastMessage(inputVal, "Spell").subscribe((data: FlaggedToken[]) => {
+        if (data.length > 0) {
+          this.spellCheckObject(data);
         } else {
           this.dataSource = EMPTY_SPELLCHECK
         }
+        console.log(data);
       });
       this.service.stop(this.inputFormControl.value);
     }
@@ -158,7 +163,6 @@ export class SpeechEntryComponent implements OnInit {
   // possibly callibrate sync and await use, dont understand if its being used properly
   spellCheckObject(flaggedCorrection: FlaggedToken[]){
     console.log("inside the FlaggedToken object inferencer");
-    console.log(flaggedCorrection);
     this.dataSource = flaggedCorrection;
   }
 

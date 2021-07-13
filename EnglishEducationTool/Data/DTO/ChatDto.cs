@@ -13,10 +13,6 @@ namespace EnglishEducationTool
     {
         [MaxLength(140)]
         public string UserResponse { get; set; }
-
-        public string BotResponse { get; set; }
-
-        public FlaggedToken[] FlaggedTokens { get; set; }
     }
 
     public partial class SpellCheck

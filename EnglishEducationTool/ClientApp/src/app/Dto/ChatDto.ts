@@ -1,7 +1,5 @@
 export interface ChatDto {
   userResponse: string;
-  botResponse: string;
-  flaggedTokens: FlaggedToken[];
 }
 
 export interface FlaggedToken {

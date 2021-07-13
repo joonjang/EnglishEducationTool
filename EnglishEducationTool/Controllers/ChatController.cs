@@ -26,8 +26,8 @@ namespace EnglishEducationTool.Controllers
 
         // POST api/<ChatController>
         [HttpPost]
-        [Route("send")]
-        public async Task<ActionResult<ChatDto>> Post([FromBody] ChatDto chatVal)
+        [Route("postSpell")]
+        public async Task<ActionResult<FlaggedToken[]>> PostSpell([FromBody] ChatDto chatVal)
         {
             // TODO:  OpenAI chat response implementation
 
@@ -46,11 +46,18 @@ namespace EnglishEducationTool.Controllers
             //// todo:D mock method to not overuse 3rd party server
             //userProof = await MockProofing(chatVal.UserResponse);
 
-            return new ChatDto
-            {
-                FlaggedTokens = userProof,
-                BotResponse = "HELLO WORLD [OPEN AI RESPONSE]"
-            };
+            return userProof;
+        }
+
+        // POST api/<ChatController>
+        [HttpPost]
+        [Route("postBot")]
+        public async Task<ActionResult<string>> PostBot([FromBody] ChatDto chatVal)
+        {
+            // TODO:  OpenAI chat response implementation
+            string foo = "[OpenAI Response Here] + (chatVal.userResponse: " + chatVal.UserResponse + ")";
+
+            return JsonConvert.SerializeObject(foo);
         }
 
         #region SpellCheck API

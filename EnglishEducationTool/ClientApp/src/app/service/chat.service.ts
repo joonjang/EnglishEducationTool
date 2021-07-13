@@ -8,7 +8,6 @@ import { ChatDto } from '../Dto/ChatDto';
 })
 export class ChatService {
 
-  private receivedMessageObject: ChatDto = { userResponse: "", botResponse: "", flaggedTokens: []};
   private sharedObj = new Subject<ChatDto>();
 
   constructor
@@ -18,8 +17,8 @@ export class ChatService {
   )
   { }
 
-  public broadcastMessage(chatDto: any): Observable<any> {
-    return this.http.post(this.baseUrl + "api/Chat/send", chatDto);
+  public broadcastMessage(chatDto: any, methodChoice: string): Observable<any> {
+    return this.http.post(this.baseUrl + "api/Chat/post" + methodChoice, chatDto);
   }
 
   public retrieveMappedObject(): Observable<ChatDto> {

@@ -177,22 +177,22 @@ export class SpeechEntryComponent implements OnInit {
     let defineWord = this.searchFormControl.value;
 
      ////todo:D debugging with mock data definition
-      "Hollo, wrld! I am eaten a apple"
-    this.dictionaryService.getMockWord(defineWord).subscribe(data => {
-      this.dicObj = data;
-      console.log(this.dicObj);
-    }, error => console.log(error));
+    //  "Hollo, wrld! I am eaten a apple"
+    //this.dictionaryService.getMockWord(defineWord).subscribe(data => {
+    //  this.dicObj = data;
+    //  console.log(this.dicObj);
+    //}, error => console.log(error));
 
     ////// microsoft dictionary API
-    //if (defineWord != "") {
-    //  this.dictionaryService.getWord(defineWord).subscribe(data => {
-    //    this.dicObj = data;
-    //    console.log(this.dicObj);
-    //  }, error => {
-    //    console.log(error);
-    //    this.dicObj = EMPTY_DIC;
-    //  })
-    //}
+    if (defineWord != "") {
+      this.dictionaryService.getWord(defineWord).subscribe(data => {
+        this.dicObj = data;
+        console.log(this.dicObj);
+      }, error => {
+        console.log(error);
+        this.dicObj = EMPTY_DIC;
+      })
+    }
 
   }
 

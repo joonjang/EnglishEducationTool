@@ -208,9 +208,10 @@ export class SpeechEntryComponent implements OnInit {
     this.service.stop(this.inputFormControl.value);
   }
 
-  //TODO: TRANSLATE FRONT END TYPESCRIPT SERVICE TO COMPONENT
+  //DONE: TRANSLATE FRONT END TYPESCRIPT SERVICE TO COMPONENT
+  //todo: go back to original english definition capability
   async translate() {
-    this.dicObj = await this.translateService.translateDictionary(this.dicObj);
+    this.dicObj = await this.translateService.translateDictionary(this.dicObj, this.languageFormControl.value);
   }
 
 

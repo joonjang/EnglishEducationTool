@@ -67,7 +67,7 @@ namespace EnglishEducationTool.Controllers
         public async Task<ActionResult<string>> PostTranslate([FromBody] ChatDto chatVal)
         {
 
-            string translatedDef = await TranslateDefinition(chatVal.UserResponse);
+            string translatedDef = await TranslateDefinition(chatVal.UserResponse, chatVal.Language);
 
             return JsonConvert.SerializeObject(translatedDef);
         }
@@ -84,11 +84,11 @@ namespace EnglishEducationTool.Controllers
         // This is required if using a Cognitive Services resource.
         private static readonly string location = "westus2";
 
-        async Task<string> TranslateDefinition(string receivedDef)
+        async Task<string> TranslateDefinition(string receivedDef, string lang)
         {
             // Input and output languages are defined as parameters.
             //TODO:!!!
-            string route = "/translate?api-version=3.0&from=en&to=ko";
+            string route = "/translate?api-version=3.0&from=en&to=" + lang;
             //string textToTranslate = "Hello, world!";
             object[] body = new object[] { new { Text = receivedDef } };
             var requestBody = JsonConvert.SerializeObject(body);

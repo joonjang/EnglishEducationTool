@@ -12,7 +12,7 @@ export class TranslationService {
 
   constructor(private chatService: ChatService) { }
 
-  async translateDictionary(engDic: RootDictionary[]): Promise<RootDictionary[]> {
+  async translateDictionary(engDic: RootDictionary[], lang: string): Promise<RootDictionary[]> {
     let jsonSendString: string = "";
     let transDic: RootDictionary[] = engDic;
 
@@ -25,19 +25,20 @@ export class TranslationService {
           } else {
             fooString = def.definition;
           }
-          jsonSendString = jsonSendString + " ## " + fooString;
+          jsonSendString = jsonSendString + " .-^#^#^-. " + fooString;
         })
       })
     })
 
-    let dto: ChatDto = { userResponse: jsonSendString }
+    let dto: ChatDto = { userResponse: jsonSendString, language: lang }
     let translateArr: string[] | undefined[] = [];
 
     ////// REAL API
     this.chatService.broadcastMessage(dto, "Translate")
       .subscribe({
         next(response: string) {
-          translateArr = response.split(" ## ");
+          console.log(response);
+          translateArr = response.split(".-^#^#^-.");
           translateArr.shift();
         },
         error(err: any) {
@@ -61,8 +62,6 @@ export class TranslationService {
               })
             })
           })
-          console.log(transDic);
-          console.log("done translation");
         }
       })
 
@@ -72,22 +71,6 @@ export class TranslationService {
     //translateArr = foo.split(" ## ");
     //translateArr.shift();
 
-      //transDic.forEach(function (elemnt: RootDictionary) {
-      //  elemnt.meanings.forEach(function (item: Meaning) {
-      //    item.definitions.forEach(function (def: Definition) {
-      //      let translatedDef = translateArr.shift()!;
-      //      if (translatedDef.includes('\",\"to\":')) {
-      //        def.definition = translatedDef.split('\",\"to\":')[0]
-      //      }
-      //      else {
-      //        def.definition = translatedDef
-      //      }
-      //    })
-      //  })
-      //})
-
-    console.log(transDic);
-    console.log("line before return");
     return transDic;
   }
 }

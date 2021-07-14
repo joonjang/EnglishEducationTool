@@ -12,6 +12,9 @@ namespace EnglishEducationTool
     public class ChatDto
     {
         public string UserResponse { get; set; }
+#nullable enable
+        public string? Language { get; set; }
+#nullable disable
     }
 
     public partial class SpellCheck

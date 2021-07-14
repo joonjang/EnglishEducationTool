@@ -1,5 +1,6 @@
 export interface ChatDto {
   userResponse: string;
+  language?: string;
 }
 
 export interface FlaggedToken {

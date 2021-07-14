@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -60,14 +61,66 @@ namespace EnglishEducationTool.Controllers
             return JsonConvert.SerializeObject(foo);
         }
 
-        #region SpellCheck API
+        // POST api/<ChatController>
+        [HttpPost]
+        [Route("postTranslate")]
+        public async Task<ActionResult<string>> PostTranslate([FromBody] ChatDto chatVal)
+        {
+
+            string translatedDef = await TranslateDefinition(chatVal.UserResponse);
+
+            return JsonConvert.SerializeObject(translatedDef);
+        }
+
+        //TODO: put the microsoft API subscription key and endpoint in a secret environment
+
+        #region Translate API 
+
+        //TODO: obfuscate
+        private static readonly string subscriptionKey2 = "010f1e8a50fe46a89ac53c949a96c163";
+        private static readonly string endpoint2 = "https://api.cognitive.microsofttranslator.com/";
+
+        // Add your location, also known as region. The default is global.
+        // This is required if using a Cognitive Services resource.
+        private static readonly string location = "westus2";
+
+        async Task<string> TranslateDefinition(string receivedDef)
+        {
+            // Input and output languages are defined as parameters.
+            //TODO:!!!
+            string route = "/translate?api-version=3.0&from=en&to=ko";
+            //string textToTranslate = "Hello, world!";
+            object[] body = new object[] { new { Text = receivedDef } };
+            var requestBody = JsonConvert.SerializeObject(body);
+
+            using (var client = new HttpClient())
+            using (var request = new HttpRequestMessage())
+            {
+                // Build the request.
+                request.Method = HttpMethod.Post;
+                request.RequestUri = new Uri(endpoint2 + route);
+                request.Content = new StringContent(requestBody, Encoding.UTF8, "application/json");
+                request.Headers.Add("Ocp-Apim-Subscription-Key", subscriptionKey2);
+                request.Headers.Add("Ocp-Apim-Subscription-Region", location);
+
+                // Send the request and get response.
+                HttpResponseMessage response = await client.SendAsync(request).ConfigureAwait(false);
+                // Read response as a string.
+                string result = await response.Content.ReadAsStringAsync();
+                return JsonConvert.SerializeObject(result);
+            }
+        }
+
+        #endregion
+
+        #region SpellCheck API Proofing
 
         //// Add your Azure subscription key to your environment variables.
         //static string key = Environment.GetEnvironmentVariable("BING_AUTOSUGGEST_SUBSCRIPTION_KEY");
         //// Add your Azure Bing Autosuggest endpoint to your environment variables.
         //static string endpoint = Environment.GetEnvironmentVariable("BING_AUTOSUGGEST_ENDPOINT");
 
-        //TODO: add secure environment variable for key
+        //TODO: obfuscate - add secure environment variable for key
         static string subscriptionKey = "934735cb1077416da4d4f3dce8a0d570";
         static string endpoint = "https://api.bing.microsoft.com/";
 

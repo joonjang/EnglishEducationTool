@@ -11,7 +11,6 @@ namespace EnglishEducationTool
 {
     public class ChatDto
     {
-        [MaxLength(140)]
         public string UserResponse { get; set; }
     }
 

@@ -11,6 +11,7 @@ import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { take } from 'rxjs/operators';
 import { DictionaryService } from '../service/dictionary.service';
 import { RootDictionary } from '../interface/dictionaryAPI';
+import { TranslationService } from '../service/translation.service';
 
 /** Error when invalid control is over char limit or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -83,7 +84,8 @@ export class SpeechEntryComponent implements OnInit {
     private router: Router,
     private chatService: ChatService,
     private dictionaryService: DictionaryService,
-    private _ngZone: NgZone
+    private _ngZone: NgZone,
+    private translateService: TranslationService
   ) {
     this.service.init();
     this.service.textObs.subscribe((e: string) => {
@@ -110,12 +112,12 @@ export class SpeechEntryComponent implements OnInit {
   }
 
   sendClick() {
+    var inputVal = <ChatDto>{};
+    inputVal.userResponse = this.inputFormControl.value;
+
     this.messages.push("User: " + inputVal.userResponse);
     this.inputFormControl.reset("");
     this.service.stop(this.inputFormControl.value);
-
-    var inputVal = <ChatDto>{};
-    inputVal.userResponse = this.inputFormControl.value;
 
     if (this.filter.isProfane(inputVal.userResponse)) {
       console.log("bad word detected")
@@ -172,24 +174,26 @@ export class SpeechEntryComponent implements OnInit {
 
   ///// DONE: implement dictionary API service so the component doesnt know the logic, only exposed to methods
   getDefinition() {
-    let defineWord =  this.searchFormControl.value;
-    // todo:D debugging with mock data definition
-    //  "Hollo, wrld! I am eaten a apple"
-    //this.dictionaryService.getMockWord(defineWord).subscribe(data => {
-    //  this.dicObj = data;
-    //  console.log(this.dicObj);
-    //}, error => console.log(error));
+    let defineWord = this.searchFormControl.value;
 
-    //// microsoft dictionary API
-    if (defineWord != "") {
-      this.dictionaryService.getWord(defineWord).subscribe(data => {
-        this.dicObj = data;
-        console.log(this.dicObj);
-      }, error => {
-        console.log(error);
-        this.dicObj = EMPTY_DIC;
-    })
-    }
+     ////todo:D debugging with mock data definition
+      "Hollo, wrld! I am eaten a apple"
+    this.dictionaryService.getMockWord(defineWord).subscribe(data => {
+      this.dicObj = data;
+      console.log(this.dicObj);
+    }, error => console.log(error));
+
+    ////// microsoft dictionary API
+    //if (defineWord != "") {
+    //  this.dictionaryService.getWord(defineWord).subscribe(data => {
+    //    this.dicObj = data;
+    //    console.log(this.dicObj);
+    //  }, error => {
+    //    console.log(error);
+    //    this.dicObj = EMPTY_DIC;
+    //  })
+    //}
+
   }
 
   playAudio() {
@@ -203,5 +207,12 @@ export class SpeechEntryComponent implements OnInit {
   stopListening() {
     this.service.stop(this.inputFormControl.value);
   }
+
+  //TODO: TRANSLATE FRONT END TYPESCRIPT SERVICE TO COMPONENT
+  async translate() {
+    this.dicObj = await this.translateService.translateDictionary(this.dicObj);
+  }
+
+
 }
 

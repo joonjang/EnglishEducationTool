@@ -185,8 +185,11 @@
               <div class="description-container"
                    *ngFor="let dicMeaning of dicItem.meanings">
                 <h4><i>{{ dicMeaning.partOfSpeech }}</i></h4>
-                <p style="margin-bottom: 0;"> {{ dicMeaning.definitions[0].definition }}</p>
-                <p style="color: gray;" *ngIf="dicMeaning.definitions[0].example != null"> "{{ dicMeaning.definitions[0].example }}" </p>
+
+                <ng-container *ngFor="let def of dicMeaning.definitions">
+                  <p style="margin-bottom: 0;"> {{ def.definition }}</p>
+                  <p style="color: gray;" *ngIf="def.example != null"> "{{ def.example }}" </p>
+                </ng-container>
               </div>
             </ng-container>
           </div>
@@ -194,6 +197,7 @@
         </mat-expansion-panel>
       </div>
     </mat-accordion>
+    <button (click)="translate()">FOO TRANSLATE</button>
   </mat-drawer>
 
   <mat-drawer-content>

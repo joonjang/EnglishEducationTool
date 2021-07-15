@@ -14,5 +14,9 @@ namespace EnglishEducationTool.Models
         public string SpellCheckApiKey { get; set; }
         public string SpellCheckApiEndpoint { get; set; }
         public string SpellCheckApiRegion { get; set; }
+
+        public string ContentModerationApiKey { get; set; }
+        public string ContentModerationApiEndpoint { get; set; }
+        public string ContentModerationApiRegion { get; set; }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using EnglishEducationTool.Data.Models;
+using EnglishEducationTool.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -18,6 +20,12 @@ namespace EnglishEducationTool.Controllers
     [ApiController]
     public class ChatController : ControllerBase
     {
+        public AppKeyConfig AppConfigs { get; }
+        public ChatController(IOptions<AppKeyConfig> appKeys)
+        {
+            AppConfigs = appKeys.Value;
+        }
+
         // GET: api/<ChatController>
         [HttpGet]
         public IEnumerable<string> Get()
@@ -72,24 +80,18 @@ namespace EnglishEducationTool.Controllers
             return JsonConvert.SerializeObject(translatedDef);
         }
 
-        //TODO: put the microsoft API subscription key and endpoint in a secret environment
+        //DONE: put the microsoft API subscription key and endpoint in a secret environment
 
         #region Translate API 
 
-        //TODO: obfuscate
-        private static readonly string subscriptionKey2 = "010f1e8a50fe46a89ac53c949a96c163";
-        private static readonly string endpoint2 = "https://api.cognitive.microsofttranslator.com/";
 
         // Add your location, also known as region. The default is global.
         // This is required if using a Cognitive Services resource.
-        private static readonly string location = "westus2";
 
         async Task<string> TranslateDefinition(string receivedDef, string lang)
         {
             // Input and output languages are defined as parameters.
-            //TODO:!!!
             string route = "/translate?api-version=3.0&from=en&to=" + lang;
-            //string textToTranslate = "Hello, world!";
             object[] body = new object[] { new { Text = receivedDef } };
             var requestBody = JsonConvert.SerializeObject(body);
 
@@ -98,10 +100,10 @@ namespace EnglishEducationTool.Controllers
             {
                 // Build the request.
                 request.Method = HttpMethod.Post;
-                request.RequestUri = new Uri(endpoint2 + route);
+                request.RequestUri = new Uri(AppConfigs.TranslateApiEndpoint + route);
                 request.Content = new StringContent(requestBody, Encoding.UTF8, "application/json");
-                request.Headers.Add("Ocp-Apim-Subscription-Key", subscriptionKey2);
-                request.Headers.Add("Ocp-Apim-Subscription-Region", location);
+                request.Headers.Add("Ocp-Apim-Subscription-Key", AppConfigs.TranslateApiKey);
+                request.Headers.Add("Ocp-Apim-Subscription-Region", AppConfigs.TranslateApiRegion);
 
                 // Send the request and get response.
                 HttpResponseMessage response = await client.SendAsync(request).ConfigureAwait(false);
@@ -120,10 +122,6 @@ namespace EnglishEducationTool.Controllers
         //// Add your Azure Bing Autosuggest endpoint to your environment variables.
         //static string endpoint = Environment.GetEnvironmentVariable("BING_AUTOSUGGEST_ENDPOINT");
 
-        //TODO: obfuscate - add secure environment variable for key
-        static string subscriptionKey = "934735cb1077416da4d4f3dce8a0d570";
-        static string endpoint = "https://api.bing.microsoft.com/";
-
         static string path = "/v7.0/spellcheck?";
 
         // For a list of available markets, go to:
@@ -140,7 +138,7 @@ namespace EnglishEducationTool.Controllers
         async Task<FlaggedToken[]> Proofing(string userChatInput)
         {
             HttpClient client = new HttpClient();
-            client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", subscriptionKey);
+            client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", AppConfigs.SpellCheckApiKey);
 
             // The following headers are optional, but it is recommended they be treated as required.
             // These headers help the service return more accurate results.
@@ -149,7 +147,7 @@ namespace EnglishEducationTool.Controllers
             // client.DefaultRequestHeaders.Add("X-MSEdge-ClientIP", ClientIp);
 
             HttpResponseMessage response = new HttpResponseMessage();
-            string uri = endpoint + path;
+            string uri = AppConfigs.SpellCheckApiEndpoint + path;
 
             List<KeyValuePair<string, string>> values = new List<KeyValuePair<string, string>>();
             values.Add(new KeyValuePair<string, string>("mkt", market));

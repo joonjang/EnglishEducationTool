@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using EnglishEducationTool.Data.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication;
+using EnglishEducationTool.Models;
 
 namespace EnglishEducationTool
 {
@@ -52,6 +53,8 @@ namespace EnglishEducationTool
 
             services.AddIdentityServer().AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
             services.AddAuthentication().AddIdentityServerJwt();
+
+            services.Configure<AppKeyConfig>(Configuration.GetSection("AppKeys"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,10 +1,12 @@
 ﻿using EnglishEducationTool.Data.Models;
 using EnglishEducationTool.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.CognitiveServices.ContentModerator;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -38,6 +40,11 @@ namespace EnglishEducationTool.Controllers
         [Route("postSpell")]
         public async Task<ActionResult<FlaggedToken[]>> PostSpell([FromBody] ChatDto chatVal)
         {
+            if (ModerateText(chatVal.UserResponse))
+            {
+                return null;
+            }
+
             // TODO:  OpenAI chat response implementation
 
             FlaggedToken[] userProof = Array.Empty<FlaggedToken>();
@@ -63,6 +70,11 @@ namespace EnglishEducationTool.Controllers
         [Route("postBot")]
         public async Task<ActionResult<string>> PostBot([FromBody] ChatDto chatVal)
         {
+            if (ModerateText(chatVal.UserResponse))
+            {
+                return JsonConvert.SerializeObject("CONTENT BLOCKED"); ;
+            }
+
             // TODO:  OpenAI chat response implementation
             string foo = "[OpenAI Response Here] + (chatVal.userResponse: " + chatVal.UserResponse + ")";
 
@@ -82,7 +94,7 @@ namespace EnglishEducationTool.Controllers
 
         //DONE: put the microsoft API subscription key and endpoint in a secret environment
 
-        #region Translate API 
+        #region Translate API Definition
 
 
         // Add your location, also known as region. The default is global.
@@ -199,6 +211,41 @@ namespace EnglishEducationTool.Controllers
             return flaggedToken;
         }
 
+        #region Content Moderation API
+
+        /*
+		 * AUTHENTICATE
+		 * Creates a new client with a validated subscription key and endpoint.
+		 */
+        public static ContentModeratorClient Authenticate(string key, string endpoint)
+        {
+            ContentModeratorClient client = new ContentModeratorClient(new ApiKeyServiceClientCredentials(key));
+            client.Endpoint = endpoint;
+
+            return client;
+        }
+
+
+        // TEXT MODERATION
+        bool ModerateText(string userInput)
+        {
+            // CLIENTS - each API call needs its own client
+            // Create a text review client
+            ContentModeratorClient clientText = Authenticate(AppConfigs.ContentModerationApiKey, AppConfigs.ContentModerationApiEndpoint);
+
+            // Remove carriage returns
+            userInput = userInput.Replace(Environment.NewLine, " ");
+            // Convert string to a byte[], then into a stream (for parameter in ScreenText()).
+            byte[] textBytes = Encoding.UTF8.GetBytes(userInput);
+            MemoryStream stream = new MemoryStream(textBytes);
+
+            // Moderate the text
+
+            var screenResult = clientText.TextModeration.ScreenText("text/plain", stream, "eng", pII: true);
+            return !((null == screenResult.Terms) && (null == screenResult.PII));
+        }
+
+        #endregion
 
     }
 }

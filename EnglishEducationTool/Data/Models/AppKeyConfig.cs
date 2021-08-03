@@ -18,5 +18,9 @@ namespace EnglishEducationTool.Models
         public string ContentModerationApiKey { get; set; }
         public string ContentModerationApiEndpoint { get; set; }
         public string ContentModerationApiRegion { get; set; }
+
+        public string SpeechApiKey { get; set; }
+        public string SpeechApiEndpoint { get; set; }
+        public string SpeechApiRegion { get; set; }
     }
 }

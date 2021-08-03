@@ -2,6 +2,7 @@
 using EnglishEducationTool.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.CognitiveServices.ContentModerator;
+using Microsoft.CognitiveServices.Speech;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System;
@@ -13,6 +14,7 @@ using System.Net.Http.Headers;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -72,7 +74,7 @@ namespace EnglishEducationTool.Controllers
         {
             if (ModerateText(chatVal.UserResponse))
             {
-                return JsonConvert.SerializeObject("CONTENT BLOCKED"); ;
+                return JsonConvert.SerializeObject("Please refrain from messaging me about potential personally identiable information and/or profane things"); ;
             }
 
             // TODO:  OpenAI chat response implementation
@@ -213,6 +215,8 @@ namespace EnglishEducationTool.Controllers
 
         #region Content Moderation API
 
+
+
         /*
 		 * AUTHENTICATE
 		 * Creates a new client with a validated subscription key and endpoint.
@@ -243,6 +247,63 @@ namespace EnglishEducationTool.Controllers
 
             var screenResult = clientText.TextModeration.ScreenText("text/plain", stream, "eng", pII: true);
             return !((null == screenResult.Terms) && (null == screenResult.PII));
+        }
+
+        #endregion
+
+        #region Text To Speech Synthesis API
+
+
+        //TODO: !!! WIP
+
+        public async Task SynthesizeAudioAsync(string userInput)
+        {
+            string xmlFilePath = Path.GetTempPath() + "ssml.xml";
+
+            // pretty sure this can be achieved with LINQ or something, i just don't 
+            // know what the name of what i am doing is, something to do with "query"
+            var speak = new Speak()
+            {
+                Lang = "en-US",
+                Emo = "http://www.w3.org/2009/10/emotionml",
+                Xmlns = "http://www.w3.org/2001/10/synthesis",
+                Mstts = "http://www.w3.org/2001/mstts",
+                Version = "1.0"
+
+            };
+            var voice = new Voice() { Name = "en-US-JennyNeural" };
+            var expressas = new Expressas() { Style = "customerservice" };
+            var prosody = new Prosody()
+            {
+                Rate = "-25%",
+                Pitch = "0%",
+                Text = userInput
+            };
+            expressas.Prosody = prosody;
+            voice.Expressas = expressas;
+            speak.Voice = voice;
+
+            SerializeToXml(speak, xmlFilePath);
+
+
+            var config = SpeechConfig.FromSubscription(AppConfigs.SpeechApiKey, AppConfigs.SpeechApiRegion);
+            using var synthesizer = new SpeechSynthesizer(config, null);
+
+            var ssml = System.IO.File.ReadAllText(Path.GetTempPath() + "ssml.xml");
+            var result = await synthesizer.SpeakSsmlAsync(ssml);
+
+            using var stream = AudioDataStream.FromResult(result);
+            await stream.SaveToWaveFileAsync(Path.GetTempPath() + "response.wav");
+        }
+
+        public static void SerializeToXml<T>(T anyobject, string xmlFilePath)
+        {
+            XmlSerializer xmlSerializer = new XmlSerializer(anyobject.GetType());
+
+            using (StreamWriter writer = new StreamWriter(xmlFilePath))
+            {
+                xmlSerializer.Serialize(writer, anyobject);
+            }
         }
 
         #endregion

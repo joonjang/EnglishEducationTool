@@ -1,6 +1,7 @@
 export interface ChatDto {
   userResponse: string;
   language?: string;
+  sound?: File;
 }
 
 export interface FlaggedToken {

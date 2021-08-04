@@ -13,6 +13,7 @@ import { DictionaryService } from '../service/dictionary.service';
 import { RootDictionary } from '../interface/dictionaryAPI';
 import { TranslationService } from '../service/translation.service';
 
+
 /** Error when invalid control is over char limit or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -129,9 +130,13 @@ export class SpeechEntryComponent implements OnInit {
 
       //BACKLOG: HYPERLINK THE USER INPUT WITH JSON INFO OF CORRECTED SPELLING AND HOW MANY TOKEN
       // SUGGESTIONS HAVE BEEN RECEIVED
-      this.chatService.broadcastMessage(inputVal, "Bot").subscribe((data: string) => {
-        console.log(data);
-        this.messages.push("AI: " + data);
+      this.chatService.broadcastMessage(inputVal, "Bot").subscribe((data: ChatDto) => {
+        console.log(data.botResponse);
+        console.log("AudioObject");
+
+        console.log(data.synthAudio);
+
+        this.messages.push("AI: " + data.botResponse);
       });
     }
   }
@@ -212,6 +217,11 @@ export class SpeechEntryComponent implements OnInit {
   //todo: go back to original english definition capability
   async translate() {
     this.dicObj = await this.translateService.translateDictionary(this.dicObj, this.languageFormControl.value);
+  }
+
+  //TODO: !!! AUDIO SYNTH METHOD FRONT END
+
+  synth() {
   }
 
 

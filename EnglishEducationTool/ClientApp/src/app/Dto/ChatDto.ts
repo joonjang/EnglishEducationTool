@@ -1,7 +1,8 @@
 export interface ChatDto {
   userResponse: string;
+  botResponse?: string;
   language?: string;
-  sound?: File;
+  synthAudio?: AudioBuffer;
 }
 
 export interface FlaggedToken {

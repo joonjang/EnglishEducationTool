@@ -13,7 +13,9 @@ namespace EnglishEducationTool
     {
         public string UserResponse { get; set; }
 #nullable enable
+        public string? BotResponse { get; set; }
         public string? Language { get; set; }
+        public byte[]? SynthAudio { get; set; }
 #nullable disable
     }
 

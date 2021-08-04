@@ -70,17 +70,25 @@ namespace EnglishEducationTool.Controllers
         // POST api/<ChatController>
         [HttpPost]
         [Route("postBot")]
-        public async Task<ActionResult<string>> PostBot([FromBody] ChatDto chatVal)
+        public async Task<ActionResult<ChatDto>> PostBot([FromBody] ChatDto chatVal)
         {
             if (ModerateText(chatVal.UserResponse))
             {
-                return JsonConvert.SerializeObject("Please refrain from messaging me about potential personally identiable information and/or profane things"); ;
+                return new ChatDto() 
+                { 
+                    BotResponse = "Please refrain from messaging me about potential personally identiable " +
+                    "information and/or profane things" 
+                };
             }
 
             // TODO:  OpenAI chat response implementation
             string foo = "[OpenAI Response Here] + (chatVal.userResponse: " + chatVal.UserResponse + ")";
 
-            return JsonConvert.SerializeObject(foo);
+            return new ChatDto()
+            {
+                BotResponse = "Hello Joon, you can do it!",
+                SynthAudio = await SynthesizeAudioAsync("Hello Joon, you can do it!")
+            };
         }
 
         // POST api/<ChatController>
@@ -256,7 +264,7 @@ namespace EnglishEducationTool.Controllers
 
         //TODO: !!! WIP
 
-        public async Task SynthesizeAudioAsync(string userInput)
+        public async Task<byte[]> SynthesizeAudioAsync(string userInput)
         {
             string xmlFilePath = Path.GetTempPath() + "ssml.xml";
 
@@ -292,8 +300,19 @@ namespace EnglishEducationTool.Controllers
             var ssml = System.IO.File.ReadAllText(Path.GetTempPath() + "ssml.xml");
             var result = await synthesizer.SpeakSsmlAsync(ssml);
 
-            using var stream = AudioDataStream.FromResult(result);
-            await stream.SaveToWaveFileAsync(Path.GetTempPath() + "response.wav");
+            /// THIS IS THE BYTE ARRAY - NEW MODIFICATION
+            byte[] soundByte = result.AudioData;
+            string mimeType = "audio/wav";
+            var returnResult = new FileContentResult(soundByte, mimeType)
+            {
+                FileDownloadName = "synth.wav"
+            };
+            ///
+
+            return soundByte;
+
+            //using var stream = AudioDataStream.FromResult(result);
+            //await stream.SaveToWaveFileAsync(Path.GetTempPath() + "response.wav");
         }
 
         public static void SerializeToXml<T>(T anyobject, string xmlFilePath)

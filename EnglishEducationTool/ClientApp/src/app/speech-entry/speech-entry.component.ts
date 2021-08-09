@@ -80,6 +80,9 @@ export class SpeechEntryComponent implements OnInit {
   dicObj: RootDictionary[] = EMPTY_DIC;
   languageFormControl = new FormControl("en");
 
+  audioBlob: any;
+
+
   constructor(
     public service: VoiceRecognitionService,
     private router: Router,
@@ -111,7 +114,7 @@ export class SpeechEntryComponent implements OnInit {
     // DONE:D! make the service text equal to form control once dirty
     this.service.start(this.inputFormControl.value);
   }
-
+  
   sendClick() {
     var inputVal = <ChatDto>{};
     inputVal.userResponse = this.inputFormControl.value;
@@ -131,11 +134,7 @@ export class SpeechEntryComponent implements OnInit {
       //BACKLOG: HYPERLINK THE USER INPUT WITH JSON INFO OF CORRECTED SPELLING AND HOW MANY TOKEN
       // SUGGESTIONS HAVE BEEN RECEIVED
       this.chatService.broadcastMessage(inputVal, "Bot").subscribe((data: ChatDto) => {
-        console.log(data.botResponse);
-        console.log("AudioObject");
-
-        console.log(data.synthAudio);
-
+        this.audioBlob = data.synthAudio;
         this.messages.push("AI: " + data.botResponse);
       });
     }
@@ -222,6 +221,12 @@ export class SpeechEntryComponent implements OnInit {
   //TODO: !!! AUDIO SYNTH METHOD FRONT END
 
   synth() {
+
+    let objectURL = "data:audio/wav;base64," + this.audioBlob;
+
+    let audio = new Audio();
+    audio.src = objectURL;
+    audio.play().catch(err => console.log(err));
   }
 
 

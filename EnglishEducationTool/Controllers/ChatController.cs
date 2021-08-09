@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.CognitiveServices.ContentModerator;
 using Microsoft.CognitiveServices.Speech;
 using Microsoft.Extensions.Options;
+using NAudio.Lame;
+using NAudio.Wave;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -300,19 +302,21 @@ namespace EnglishEducationTool.Controllers
             var ssml = System.IO.File.ReadAllText(Path.GetTempPath() + "ssml.xml");
             var result = await synthesizer.SpeakSsmlAsync(ssml);
 
-            /// THIS IS THE BYTE ARRAY - NEW MODIFICATION
             byte[] soundByte = result.AudioData;
-            string mimeType = "audio/wav";
-            var returnResult = new FileContentResult(soundByte, mimeType)
-            {
-                FileDownloadName = "synth.wav"
-            };
-            ///
 
             return soundByte;
+        }
 
-            //using var stream = AudioDataStream.FromResult(result);
-            //await stream.SaveToWaveFileAsync(Path.GetTempPath() + "response.wav");
+        public byte[] ConvertWavToMp3(byte[] wavFile)
+        {
+            using (var retMs = new MemoryStream())
+            using (var ms = new MemoryStream(wavFile))
+            using (var rdr = new WaveFileReader(ms))
+            using (var wtr = new LameMP3FileWriter(retMs, rdr.WaveFormat, 128))
+            {
+                rdr.CopyTo(wtr);
+                return retMs.ToArray();
+            }
         }
 
         public static void SerializeToXml<T>(T anyobject, string xmlFilePath)

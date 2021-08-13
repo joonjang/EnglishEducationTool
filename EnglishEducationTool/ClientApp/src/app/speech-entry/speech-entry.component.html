@@ -215,9 +215,14 @@
         </div>
 
         <div id="conversation-history">
+
+            
+
+
           <mat-list dense id="message-list">
             <mat-list-item *ngFor="let message of messages">
               <p> {{ message }} </p>
+              <span class="tw" #tw id="tw"></span>
             </mat-list-item>
           </mat-list>
         </div>

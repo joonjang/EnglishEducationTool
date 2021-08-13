@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, ViewChild, NgZone } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild, NgZone, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { VoiceRecognitionService } from '../service/voice-recognition.service';
 import { ChatDto, FlaggedToken } from '../Dto/ChatDto';
@@ -12,6 +12,7 @@ import { take } from 'rxjs/operators';
 import { DictionaryService } from '../service/dictionary.service';
 import { RootDictionary } from '../interface/dictionaryAPI';
 import { TranslationService } from '../service/translation.service';
+import Typewriter from 't-writer.js';
 
 
 /** Error when invalid control is over char limit or submitted. */
@@ -59,10 +60,14 @@ const EMPTY_DIC = [{
 
 export class SpeechEntryComponent implements OnInit {
 
+  @ViewChild('tw') typewriterElement: any;
+  @ViewChild('autosize') autosize!: CdkTextareaAutosize;
+
+
   messages =
     [
       "User: Hello",
-      "AI: Hello",
+      "AI:",
     ];
   filter = new BadWordsFilter();
   badwordWarning: Boolean = false;
@@ -99,10 +104,22 @@ export class SpeechEntryComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getDefinition();
+    this.getDefinition
   }
 
-  @ViewChild('autosize') autosize!: CdkTextareaAutosize;
+  ngAfterViewInit() {
+      const target = this.typewriterElement.nativeElement;
+      const writer = new Typewriter(target, {
+        loop: true,
+        typeColor: '#0066CC',
+        cursorColor: '#E0E0E0'
+      })
+
+      writer.type("hello how are you is this text showing up?")
+        .rest(500)
+        .start
+  }
+
 
   triggerResize() {
     // Wait for changes to be applied, then trigger textarea resize.

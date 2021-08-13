@@ -30,41 +30,35 @@ namespace EnglishEducationTool.Controllers
             AppConfigs = appKeys.Value;
         }
 
-        // GET: api/<ChatController>
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
         // POST api/<ChatController>
         [HttpPost]
         [Route("postSpell")]
         public async Task<ActionResult<FlaggedToken[]>> PostSpell([FromBody] ChatDto chatVal)
         {
-            if (ModerateText(chatVal.UserResponse))
-            {
-                return null;
-            }
-
-            // TODO:  OpenAI chat response implementation
-
-            FlaggedToken[] userProof = Array.Empty<FlaggedToken>();
-
-            // microsoft SpellCheck API
-            try
-            {
-                userProof = await Proofing(chatVal.UserResponse);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            };
-
             //// todo:D mock method to not overuse 3rd party server
-            //userProof = await MockProofing(chatVal.UserResponse);
+            return await MockProofing(chatVal.UserResponse);
 
-            return userProof;
+            //TODO: D
+            //if (ModerateText(chatVal.UserResponse))
+            //{
+            //    return null;
+            //}
+
+            //// TODO:  OpenAI chat response implementation
+
+            //FlaggedToken[] userProof = Array.Empty<FlaggedToken>();
+
+            //// microsoft SpellCheck API
+            //try
+            //{
+            //    userProof = await Proofing(chatVal.UserResponse);
+            //}
+            //catch (Exception e)
+            //{
+            //    Console.WriteLine(e);
+            //};
+
+            //return userProof;
         }
 
         // POST api/<ChatController>
@@ -72,14 +66,15 @@ namespace EnglishEducationTool.Controllers
         [Route("postBot")]
         public async Task<ActionResult<ChatDto>> PostBot([FromBody] ChatDto chatVal)
         {
-            if (ModerateText(chatVal.UserResponse))
-            {
-                return new ChatDto() 
-                { 
-                    BotResponse = "Please refrain from messaging me about potential personally identiable " +
-                    "information and/or profane things" 
-                };
-            }
+            //TODO: D
+            //if (ModerateText(chatVal.UserResponse))
+            //{
+            //    return new ChatDto() 
+            //    { 
+            //        BotResponse = "Please refrain from messaging me about potential personally identiable " +
+            //        "information and/or profane things" 
+            //    };
+            //}
 
             // TODO:  OpenAI chat response implementation
             string foo = "[OpenAI Response Here] + (chatVal.userResponse: " + chatVal.UserResponse + ")";
@@ -87,7 +82,8 @@ namespace EnglishEducationTool.Controllers
             return new ChatDto()
             {
                 BotResponse = "Hello Joon, you can do it!",
-                SynthAudio = await SynthesizeAudioAsync("Hello Joon, you can do it!")
+                //TODO: D
+                //SynthAudio = await SynthesizeAudioAsync("Hello Joon, you can do it!")
             };
         }
 
@@ -96,13 +92,32 @@ namespace EnglishEducationTool.Controllers
         [Route("postTranslate")]
         public async Task<ActionResult<string>> PostTranslate([FromBody] ChatDto chatVal)
         {
+            return "";
 
-            string translatedDef = await TranslateDefinition(chatVal.UserResponse, chatVal.Language);
 
-            return JsonConvert.SerializeObject(translatedDef);
+
+            //TODO: D
+            //string translatedDef = await TranslateDefinition(chatVal.UserResponse, chatVal.Language);
+            //return JsonConvert.SerializeObject(translatedDef);
         }
 
         //DONE: put the microsoft API subscription key and endpoint in a secret environment
+
+        async Task<FlaggedToken[]> MockProofing(string userChatInput)
+        {
+            //  "Hollo, wrld! I am eaten a apple"
+            string contentString = "{\"_type\": \"SpellCheck\", \"flaggedTokens\": [{\"offset\": 0, \"token\": \"Hollo\", \"type\": \"UnknownToken\", \"suggestions\": [{\"suggestion\": \"Hello\", \"score\": 0.8502965392240266}, {\"suggestion\": \"Hollow\", \"score\": 0.6217967251270513}]}, {\"offset\": 7, \"token\": \"wrld\", \"type\": \"UnknownToken\", \"suggestions\": [{\"suggestion\": \"world\", \"score\": 0.8502965392240266}]}, {\"offset\": 18, \"token\": \"eaten\", \"type\": \"UnknownToken\", \"suggestions\": [{\"suggestion\": \"eating\", \"score\": 0.8502965392240266}]}]}";
+            //mock json data for contentString:
+            // "Hollo, wrld!"
+            // "{\"_type\": \"SpellCheck\", \"flaggedTokens\": [{\"offset\": 0, \"token\": \"Hollo\", \"type\": \"UnknownToken\", \"suggestions\": [{\"suggestion\": \"Hello\", \"score\": 0.9124109442175475}, {\"suggestion\": \"Hollow\", \"score\": 0.7889023543711866}]}, {\"offset\": 7, \"token\": \"wrld\", \"type\": \"UnknownToken\", \"suggestions\": [{\"suggestion\": \"world\", \"score\": 0.9124109442175475}]}]}"
+            //
+            // "There going to bring they’re suitcases."
+            // "{\"_type\": \"SpellCheck\", \"flaggedTokens\": [{\"offset\": 21, \"token\": \"they’re\", \"type\": \"UnknownToken\", \"suggestions\": [{\"suggestion\": \"their\", \"score\": 0.8961550966590242}]}]}"
+            //Deserialize the JSON response from the API
+            SpellCheck jsonObj = JsonConvert.DeserializeObject<SpellCheck>(contentString);
+            FlaggedToken[] flaggedToken = jsonObj.FlaggedTokens;
+            return flaggedToken;
+        }
 
         #region Translate API Definition
 
@@ -204,22 +219,6 @@ namespace EnglishEducationTool.Controllers
         }
 
         #endregion
-
-        async Task<FlaggedToken[]> MockProofing(string userChatInput)
-        {
-            //  "Hollo, wrld! I am eaten a apple"
-            string contentString = "{\"_type\": \"SpellCheck\", \"flaggedTokens\": [{\"offset\": 0, \"token\": \"Hollo\", \"type\": \"UnknownToken\", \"suggestions\": [{\"suggestion\": \"Hello\", \"score\": 0.8502965392240266}, {\"suggestion\": \"Hollow\", \"score\": 0.6217967251270513}]}, {\"offset\": 7, \"token\": \"wrld\", \"type\": \"UnknownToken\", \"suggestions\": [{\"suggestion\": \"world\", \"score\": 0.8502965392240266}]}, {\"offset\": 18, \"token\": \"eaten\", \"type\": \"UnknownToken\", \"suggestions\": [{\"suggestion\": \"eating\", \"score\": 0.8502965392240266}]}]}";
-            //mock json data for contentString:
-            // "Hollo, wrld!"
-            // "{\"_type\": \"SpellCheck\", \"flaggedTokens\": [{\"offset\": 0, \"token\": \"Hollo\", \"type\": \"UnknownToken\", \"suggestions\": [{\"suggestion\": \"Hello\", \"score\": 0.9124109442175475}, {\"suggestion\": \"Hollow\", \"score\": 0.7889023543711866}]}, {\"offset\": 7, \"token\": \"wrld\", \"type\": \"UnknownToken\", \"suggestions\": [{\"suggestion\": \"world\", \"score\": 0.9124109442175475}]}]}"
-            //
-            // "There going to bring they’re suitcases."
-            // "{\"_type\": \"SpellCheck\", \"flaggedTokens\": [{\"offset\": 21, \"token\": \"they’re\", \"type\": \"UnknownToken\", \"suggestions\": [{\"suggestion\": \"their\", \"score\": 0.8961550966590242}]}]}"
-            //Deserialize the JSON response from the API
-            SpellCheck jsonObj = JsonConvert.DeserializeObject<SpellCheck>(contentString);
-            FlaggedToken[] flaggedToken = jsonObj.FlaggedTokens;
-            return flaggedToken;
-        }
 
         #region Content Moderation API
 

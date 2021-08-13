@@ -117,7 +117,7 @@ export class SpeechEntryComponent implements OnInit {
 
       writer.type("hello how are you is this text showing up?")
         .rest(500)
-        .start
+        .start()
   }
 
 

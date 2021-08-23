@@ -119,22 +119,37 @@ export class SpeechEntryComponent implements OnInit {
       .subscribe(() => this.autosize.resizeToFitContent(true));
   }
 
+  // recording button, triggers browser to listen to mic and transfer value to input field
   startService() {
     // DONE:D! make the service text equal to form control once dirty
+
     this.service.start(this.inputFormControl.value);
   }
 
-  sendClick() {
+  //DONE: stop listening button for voice recognition
+  async stopListening() {
+    
+    this.service.stop(this.inputFormControl.value);
+    await new Promise(f => setTimeout(f, 400));
+  }
+
+  async sendClick() {
+
+    //makes it so the function waits a bit before clearing input to let recording stop
+    await this.stopListening();
+    //this.inputFormControl.reset("");
+
+    //await new Promise(f => setTimeout(f, 400));
+
+    //this.service.stop(this.inputFormControl.value);
+
     var inputVal = <ChatDto>{};
     inputVal.userResponse = this.inputFormControl.value;
 
     if (this.filter.isProfane(inputVal.userResponse)) {
       console.log("bad word detected")
-
-      this.messages.push("User: " + inputVal.userResponse);
-      this.inputFormControl.reset("");
-      this.service.stop(this.inputFormControl.value);
-
+    this.messages.push("User: -");
+    
       this.badwordWarning = true;
     }
     else {
@@ -146,14 +161,18 @@ export class SpeechEntryComponent implements OnInit {
       this.chatService.broadcastMessage(inputVal, "Bot").subscribe((data: ChatDto) => {
         this.audioBlob = data.synthAudio;
         this.messages.push("AI: " + this.queueAiMsg)
-
-        this.messages.push("User: " + inputVal.userResponse);
-        this.inputFormControl.reset("");
         this.service.stop(this.inputFormControl.value);
+        this.messages.push("User: " + inputVal.userResponse);
 
         this.typeWriter(data.botResponse);
       });
     }
+
+    
+    this.inputFormControl.reset("");
+
+    //this.inputFormControl.reset("");
+    //this.service.stop(this.inputFormControl.value);
 
   }
 
@@ -224,10 +243,7 @@ export class SpeechEntryComponent implements OnInit {
     audio.play();
   }
 
-  //DONE: stop listening button for voice recognition
-  stopListening() {
-    this.service.stop(this.inputFormControl.value);
-  }
+
 
   //DONE: TRANSLATE FRONT END TYPESCRIPT SERVICE TO COMPONENT
   //todo: go back to original english definition capability

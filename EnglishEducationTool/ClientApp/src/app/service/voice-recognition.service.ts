@@ -14,7 +14,7 @@ declare var webkitSpeechRecognition: any;
 export class VoiceRecognitionService {
 
   recognition = new webkitSpeechRecognition();
-  isStoppedSpeechRecog = false;
+  public isStoppedSpeechRecog = true;
   public text = '';
   tempWords!: string;
   public textObs: any;

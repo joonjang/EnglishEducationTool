@@ -235,17 +235,24 @@
             <div class="input-button-container">
               <button mat-fab
                       color="accent"
-                      (click)="startService()">
+                      (click)="startService()"
+                       *ngIf="this.service.isStoppedSpeechRecog">
                 <mat-icon>mic</mat-icon>
               </button>
+              <button mat-fab
+                      color="basic"
+                      (click)="stopListening()"
+                      *ngIf="!this.service.isStoppedSpeechRecog">
+                <mat-icon>stop</mat-icon>
+              </button>
             </div>
-            <div class="input-button-container">
+            <!--<div class="input-button-container" *ngIf="recordBool">
               <button mat-fab
                       color="basic"
                       (click)="stopListening()">
                 <mat-icon>stop</mat-icon>
               </button>
-            </div>
+            </div>-->
 
             <mat-form-field id="input-full-width">
               <mat-label>Message</mat-label>

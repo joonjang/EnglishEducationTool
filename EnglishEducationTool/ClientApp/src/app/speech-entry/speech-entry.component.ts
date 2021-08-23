@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, ViewChild, NgZone, AfterViewInit } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild, NgZone, ElementRef, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { VoiceRecognitionService } from '../service/voice-recognition.service';
 import { ChatDto, FlaggedToken } from '../Dto/ChatDto';
@@ -12,14 +12,13 @@ import { take } from 'rxjs/operators';
 import { DictionaryService } from '../service/dictionary.service';
 import { RootDictionary } from '../interface/dictionaryAPI';
 import { TranslationService } from '../service/translation.service';
-import Typewriter from 't-writer.js';
 
 
 /** Error when invalid control is over char limit or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
     const isSubmitted = form && form.submitted;
-    return !!(control && control.invalid &&  (isSubmitted || control.touched || control.dirty));
+    return !!(control && control.invalid && (isSubmitted || control.touched || control.dirty));
   }
 }
 
@@ -60,14 +59,14 @@ const EMPTY_DIC = [{
 
 export class SpeechEntryComponent implements OnInit {
 
-  @ViewChild('tw') typewriterElement: any;
   @ViewChild('autosize') autosize!: CdkTextareaAutosize;
+  @ViewChild('tw', { static: false }) tw!: ElementRef;
 
 
+  queueAiMsg = "";
   messages =
     [
       "User: Hello",
-      "AI:",
     ];
   filter = new BadWordsFilter();
   badwordWarning: Boolean = false;
@@ -105,20 +104,13 @@ export class SpeechEntryComponent implements OnInit {
 
   ngOnInit(): void {
     this.getDefinition
+
   }
 
-  ngAfterViewInit() {
-      const target = this.typewriterElement.nativeElement;
-      const writer = new Typewriter(target, {
-        loop: true,
-        typeColor: '#0066CC',
-        cursorColor: '#E0E0E0'
-      })
-
-      writer.type("hello how are you is this text showing up?")
-        .rest(500)
-        .start()
+  ngAfterViewInit(): void {
+    this.typeWriter("Hello")
   }
+
 
 
   triggerResize() {
@@ -131,17 +123,18 @@ export class SpeechEntryComponent implements OnInit {
     // DONE:D! make the service text equal to form control once dirty
     this.service.start(this.inputFormControl.value);
   }
-  
+
   sendClick() {
     var inputVal = <ChatDto>{};
     inputVal.userResponse = this.inputFormControl.value;
 
-    this.messages.push("User: " + inputVal.userResponse);
-    this.inputFormControl.reset("");
-    this.service.stop(this.inputFormControl.value);
-
     if (this.filter.isProfane(inputVal.userResponse)) {
       console.log("bad word detected")
+
+      this.messages.push("User: " + inputVal.userResponse);
+      this.inputFormControl.reset("");
+      this.service.stop(this.inputFormControl.value);
+
       this.badwordWarning = true;
     }
     else {
@@ -152,9 +145,16 @@ export class SpeechEntryComponent implements OnInit {
       // SUGGESTIONS HAVE BEEN RECEIVED
       this.chatService.broadcastMessage(inputVal, "Bot").subscribe((data: ChatDto) => {
         this.audioBlob = data.synthAudio;
-        this.messages.push("AI: " + data.botResponse);
+        this.messages.push("AI: " + this.queueAiMsg)
+
+        this.messages.push("User: " + inputVal.userResponse);
+        this.inputFormControl.reset("");
+        this.service.stop(this.inputFormControl.value);
+
+        this.typeWriter(data.botResponse);
       });
     }
+
   }
 
   spellCheckFunc() {
@@ -184,20 +184,20 @@ export class SpeechEntryComponent implements OnInit {
 
   // DONE: can received json data, but need to do something with it. can only receive atm
   // possibly callibrate sync and await use, dont understand if its being used properly
-  spellCheckObject(flaggedCorrection: FlaggedToken[]){
+  spellCheckObject(flaggedCorrection: FlaggedToken[]) {
     console.log("inside the FlaggedToken object inferencer");
     this.dataSource = flaggedCorrection;
   }
 
   closeWarning() {
-    this.badwordWarning = false;
+    this.badwordWarning = false; 
   }
 
   ///// DONE: implement dictionary API service so the component doesnt know the logic, only exposed to methods
   getDefinition() {
     let defineWord = this.searchFormControl.value;
 
-     ////todo:D debugging with mock data definition
+    ////todo:D debugging with mock data definition
     //  "Hollo, wrld! I am eaten a apple"
     //this.dictionaryService.getMockWord(defineWord).subscribe(data => {
     //  this.dicObj = data;
@@ -246,6 +246,34 @@ export class SpeechEntryComponent implements OnInit {
     audio.play().catch(err => console.log(err));
   }
 
+  async typeWriter(txt: string | undefined) {
+    this.tw.nativeElement.innerHTML = "";
+    await new Promise(f => setTimeout(f, 400));
+    this.tw.nativeElement.innerHTML = "AI: ";
+    let SPEED = 50;
+    let WAITTIME = 8
+    let DOTWAIT = 400;
 
+    for (var i = 0; i < WAITTIME; i++) {
+      if (i % 3 == 0) {
+        this.tw.nativeElement.innerHTML = "AI: ";
+        await new Promise(f => setTimeout(f, DOTWAIT));
+      } 
+      this.tw.nativeElement.innerHTML += ".";
+      await new Promise(f => setTimeout(f, DOTWAIT));
+      
+    }
+
+    this.tw.nativeElement.innerHTML = "AI: ";
+
+    if (txt != undefined) {
+
+      this.queueAiMsg = txt
+      for (var i = 0; i < txt.length; i++) {
+        //document.getElementById("demo").innerHTML += txt.charAt(i);
+        this.tw.nativeElement.innerHTML += txt.charAt(i);
+        await new Promise(f => setTimeout(f, SPEED));
+      }
+    }
+  }
 }
-

@@ -199,6 +199,7 @@
     </mat-accordion>
     <button (click)="translate()">FOO TRANSLATE</button>
     <button (click)="synth()">FOO AUDIO</button>
+    <button (click)="typeWriter('TEST')">FOO TW</button>
   </mat-drawer>
 
   <mat-drawer-content>
@@ -222,7 +223,9 @@
           <mat-list dense id="message-list">
             <mat-list-item *ngFor="let message of messages">
               <p> {{ message }} </p>
-              <span class="tw" #tw id="tw"></span>
+            </mat-list-item>
+            <mat-list-item>
+              <p #tw></p>
             </mat-list-item>
           </mat-list>
         </div>

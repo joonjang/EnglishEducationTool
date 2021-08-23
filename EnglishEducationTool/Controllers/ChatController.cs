@@ -44,8 +44,6 @@ namespace EnglishEducationTool.Controllers
             //    return null;
             //}
 
-            //// TODO:  OpenAI chat response implementation
-
             //FlaggedToken[] userProof = Array.Empty<FlaggedToken>();
 
             //// microsoft SpellCheck API
@@ -261,7 +259,7 @@ namespace EnglishEducationTool.Controllers
         #region Text To Speech Synthesis API
 
 
-        //TODO: !!! WIP
+        //DONE: !!! WIP
 
         public async Task<byte[]> SynthesizeAudioAsync(string userInput)
         {

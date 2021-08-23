@@ -235,7 +235,7 @@ export class SpeechEntryComponent implements OnInit {
     this.dicObj = await this.translateService.translateDictionary(this.dicObj, this.languageFormControl.value);
   }
 
-  //TODO: !!! AUDIO SYNTH METHOD FRONT END
+  //DONE: !!! AUDIO SYNTH METHOD FRONT END
 
   synth() {
 

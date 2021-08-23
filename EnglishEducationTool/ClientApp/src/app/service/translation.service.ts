@@ -48,7 +48,7 @@ export class TranslationService {
           transDic.forEach(function (elemnt: RootDictionary) {
             elemnt.meanings.forEach(function (item: Meaning) {
               item.definitions.forEach(function (def: Definition) {
-                //todo: issue with potential undefine of translateArr casting to translateDef
+                //DONE: issue with potential undefine of translateArr casting to translateDef
                 let translatedDef: string | undefined = translateArr.shift()!;
 
                 if (translatedDef.includes('\\",\\"to')) {

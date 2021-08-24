@@ -62,7 +62,6 @@ export class SpeechEntryComponent implements OnInit {
   @ViewChild('autosize') autosize!: CdkTextareaAutosize;
   @ViewChild('tw', { static: false }) tw!: ElementRef;
 
-
   queueAiMsg = "";
   messages =
     [
@@ -82,10 +81,15 @@ export class SpeechEntryComponent implements OnInit {
   displayedColumns: string[] = ['word', 'suggestions'];
   dataSource = EMPTY_SPELLCHECK;
   dicObj: RootDictionary[] = EMPTY_DIC;
+  engDic: RootDictionary[] = EMPTY_DIC;
+  tranDic: [RootDictionary[], string] =
+    [
+      EMPTY_DIC,
+      ""
+    ];
   languageFormControl = new FormControl("en");
 
   audioBlob: any;
-
 
   constructor(
     public service: VoiceRecognitionService,
@@ -104,14 +108,11 @@ export class SpeechEntryComponent implements OnInit {
 
   ngOnInit(): void {
     this.getDefinition
-
   }
 
   ngAfterViewInit(): void {
     this.typeWriter("Hello")
   }
-
-
 
   triggerResize() {
     // Wait for changes to be applied, then trigger textarea resize.
@@ -122,34 +123,23 @@ export class SpeechEntryComponent implements OnInit {
   // recording button, triggers browser to listen to mic and transfer value to input field
   startService() {
     // DONE:D! make the service text equal to form control once dirty
-
     this.service.start(this.inputFormControl.value);
   }
 
   //DONE: stop listening button for voice recognition
   async stopListening() {
-    
     this.service.stop(this.inputFormControl.value);
     await new Promise(f => setTimeout(f, 400));
   }
 
   async sendClick() {
-
-    //makes it so the function waits a bit before clearing input to let recording stop
     await this.stopListening();
-    //this.inputFormControl.reset("");
-
-    //await new Promise(f => setTimeout(f, 400));
-
-    //this.service.stop(this.inputFormControl.value);
 
     var inputVal = <ChatDto>{};
     inputVal.userResponse = this.inputFormControl.value;
 
     if (this.filter.isProfane(inputVal.userResponse)) {
       console.log("bad word detected")
-    this.messages.push("User: -");
-    
       this.badwordWarning = true;
     }
     else {
@@ -168,12 +158,8 @@ export class SpeechEntryComponent implements OnInit {
       });
     }
 
-    
+
     this.inputFormControl.reset("");
-
-    //this.inputFormControl.reset("");
-    //this.service.stop(this.inputFormControl.value);
-
   }
 
   spellCheckFunc() {
@@ -209,7 +195,7 @@ export class SpeechEntryComponent implements OnInit {
   }
 
   closeWarning() {
-    this.badwordWarning = false; 
+    this.badwordWarning = false;
   }
 
   ///// DONE: implement dictionary API service so the component doesnt know the logic, only exposed to methods
@@ -223,10 +209,11 @@ export class SpeechEntryComponent implements OnInit {
     //  console.log(this.dicObj);
     //}, error => console.log(error));
 
-    ////// microsoft dictionary API
+    ////// dictionary API
     if (defineWord != "") {
       this.dictionaryService.getWord(defineWord).subscribe(data => {
-        this.dicObj = data;
+        this.engDic = data;
+        this.dicObj = this.engDic;
         console.log(this.dicObj);
       }, error => {
         console.log(error);
@@ -236,6 +223,7 @@ export class SpeechEntryComponent implements OnInit {
 
   }
 
+  // play Dictionary API definition pronounciation
   playAudio() {
     let audio = new Audio();
     audio.src = this.dicObj[0].phonetics[0].audio;
@@ -243,18 +231,28 @@ export class SpeechEntryComponent implements OnInit {
     audio.play();
   }
 
-
-
   //DONE: TRANSLATE FRONT END TYPESCRIPT SERVICE TO COMPONENT
   //todo: go back to original english definition capability
   async translate() {
-    this.dicObj = await this.translateService.translateDictionary(this.dicObj, this.languageFormControl.value);
+    this.tranDic[0] = await this.translateService.translateDictionary(this.dicObj, this.languageFormControl.value);
+    this.tranDic[1] = this.languageFormControl.value;
+    this.dicObj = this.tranDic[0]
+  }
+
+  switchTranslation() {
+    if (this.languageFormControl.value != "en") {
+      this.dicObj = this.engDic;
+      this.languageFormControl.setValue("en");
+      // turn form to english
+    } else {
+      this.dicObj = this.tranDic[0];
+      this.languageFormControl.setValue(this.tranDic[1]);
+      // turn language to translation
+    }
   }
 
   //DONE: !!! AUDIO SYNTH METHOD FRONT END
-
   synth() {
-
     let objectURL = "data:audio/wav;base64," + this.audioBlob;
 
     let audio = new Audio();
@@ -267,26 +265,24 @@ export class SpeechEntryComponent implements OnInit {
     await new Promise(f => setTimeout(f, 400));
     this.tw.nativeElement.innerHTML = "AI: ";
     let SPEED = 50;
-    let WAITTIME = 8
+    let WAITTIME = 5
     let DOTWAIT = 400;
 
     for (var i = 0; i < WAITTIME; i++) {
       if (i % 3 == 0) {
         this.tw.nativeElement.innerHTML = "AI: ";
         await new Promise(f => setTimeout(f, DOTWAIT));
-      } 
+      }
       this.tw.nativeElement.innerHTML += ".";
       await new Promise(f => setTimeout(f, DOTWAIT));
-      
+
     }
 
     this.tw.nativeElement.innerHTML = "AI: ";
 
     if (txt != undefined) {
-
       this.queueAiMsg = txt
       for (var i = 0; i < txt.length; i++) {
-        //document.getElementById("demo").innerHTML += txt.charAt(i);
         this.tw.nativeElement.innerHTML += txt.charAt(i);
         await new Promise(f => setTimeout(f, SPEED));
       }

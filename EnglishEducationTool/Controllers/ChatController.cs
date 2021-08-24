@@ -38,7 +38,7 @@ namespace EnglishEducationTool.Controllers
             //// todo:D mock method to not overuse 3rd party server
             return await MockProofing(chatVal.UserResponse);
 
-            //TODO: D
+            //TODO: D moderation api
             //if (ModerateText(chatVal.UserResponse))
             //{
             //    return null;
@@ -64,7 +64,7 @@ namespace EnglishEducationTool.Controllers
         [Route("postBot")]
         public async Task<ActionResult<ChatDto>> PostBot([FromBody] ChatDto chatVal)
         {
-            //TODO: D
+            //TODO: D moderation api
             //if (ModerateText(chatVal.UserResponse))
             //{
             //    return new ChatDto() 
@@ -80,7 +80,7 @@ namespace EnglishEducationTool.Controllers
             return new ChatDto()
             {
                 BotResponse = "Hello Joon, you can do it!",
-                //TODO: D
+                //TODO: D text to speach response
                 //SynthAudio = await SynthesizeAudioAsync("Hello Joon, you can do it!")
             };
         }
@@ -90,13 +90,12 @@ namespace EnglishEducationTool.Controllers
         [Route("postTranslate")]
         public async Task<ActionResult<string>> PostTranslate([FromBody] ChatDto chatVal)
         {
-            return "";
+            // empty string to not use translation api
+            //return "";
 
-
-
-            //TODO: D
-            //string translatedDef = await TranslateDefinition(chatVal.UserResponse, chatVal.Language);
-            //return JsonConvert.SerializeObject(translatedDef);
+            ////using: D translation api
+            string translatedDef = await TranslateDefinition(chatVal.UserResponse, chatVal.Language);
+            return JsonConvert.SerializeObject(translatedDef);
         }
 
         //DONE: put the microsoft API subscription key and endpoint in a secret environment

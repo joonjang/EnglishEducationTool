@@ -53,103 +53,112 @@
               Dictionary
             </mat-panel-title>
 
-            <mat-panel-description>
+            <mat-panel-description (click)="$event.stopPropagation();">
               <mat-form-field appearance="fill">
                 <mat-label>Language</mat-label>
-                <select matNativeControl [formControl]="languageFormControl">
-                  <option value="en">English</option>
-                  <option value="af">Afrikaans</option>
-                  <option value="sq">Albanian</option>
-                  <option value="am">Amharic</option>
-                  <option value="ar">Arabic</option>
-                  <option value="hy">Armenian</option>
-                  <option value="as">Assamese</option>
-                  <option value="az">Azerbaijani</option>
-                  <option value="bn">Bangla</option>
-                  <option value="bs">Bosnian (Latin)</option>
-                  <option value="bg">Bulgarian</option>
-                  <option value="yue">Cantonese (Traditional)</option>
-                  <option value="ca">Catalan</option>
-                  <option value="zh-Hans">Chinese Simplified</option>
-                  <option value="zh-Hant">Chinese Traditional</option>
-                  <option value="hr">Croatian</option>
-                  <option value="cs">Czech</option>
-                  <option value="da">Danish</option>
-                  <option value="prs">Dari</option>
-                  <option value="nl">Dutch</option>
-                  <option value="en">English</option>
-                  <option value="et">Estonian</option>
-                  <option value="fj">Fijian</option>
-                  <option value="fil">Filipino</option>
-                  <option value="fi">Finnish</option>
-                  <option value="fr">French</option>
-                  <option value="fr-ca">French (Canada)</option>
-                  <option value="de">German</option>
-                  <option value="el">Greek</option>
-                  <option value="gu">Gujarati</option>
-                  <option value="ht">Haitian Creole</option>
-                  <option value="he">Hebrew</option>
-                  <option value="hi">Hindi</option>
-                  <option value="mww">Hmong Daw</option>
-                  <option value="hu">Hungarian</option>
-                  <option value="is">Icelandic</option>
-                  <option value="id">Indonesian</option>
-                  <option value="iu">Inuktitut</option>
-                  <option value="ga">Irish</option>
-                  <option value="it">Italian</option>
-                  <option value="ja">Japanese</option>
-                  <option value="kn">Kannada</option>
-                  <option value="kk">Kazakh</option>
-                  <option value="km">Khmer</option>
-                  <option value="tlh-Latn">Klingon</option>
-                  <option value="tlh-Piqd">Klingon (plqaD)</option>
-                  <option value="ko">Korean</option>
-                  <option value="ku">Kurdish (Central)</option>
-                  <option value="kmr">Kurdish (Northern)</option>
-                  <option value="lo">Lao</option>
-                  <option value="lv">Latvian</option>
-                  <option value="lt">Lithuanian</option>
-                  <option value="mg">Malagasy</option>
-                  <option value="ms">Malay</option>
-                  <option value="ml">Malayalam</option>
-                  <option value="mt">Maltese</option>
-                  <option value="mi">Maori</option>
-                  <option value="mr">Marathi</option>
-                  <option value="my">Myanmar</option>
-                  <option value="ne">Nepali</option>
-                  <option value="nb">Norwegian</option>
-                  <option value="or">Odia</option>
-                  <option value="ps">Pashto</option>
-                  <option value="fa">Persian</option>
-                  <option value="pl">Polish</option>
-                  <option value="pt">Portuguese (Brazil)</option>
-                  <option value="pt-pt">Portuguese (Portugal)</option>
-                  <option value="pa">Punjabi</option>
-                  <option value="otq">Queretaro Otomi</option>
-                  <option value="ro">Romanian</option>
-                  <option value="ru">Russian</option>
-                  <option value="sm">Samoan</option>
-                  <option value="sr-Cyrl">Serbian (Cyrillic)</option>
-                  <option value="sr-Latn">Serbian (Latin)</option>
-                  <option value="sk">Slovak</option>
-                  <option value="sl">Slovenian</option>
-                  <option value="es">Spanish</option>
-                  <option value="sw">Swahili</option>
-                  <option value="sv">Swedish</option>
-                  <option value="ty">Tahitian</option>
-                  <option value="ta">Tamil</option>
-                  <option value="te">Telugu</option>
-                  <option value="th">Thai</option>
-                  <option value="ti">Tigrinya</option>
-                  <option value="to">Tongan</option>
-                  <option value="tr">Turkish</option>
-                  <option value="uk">Ukrainian</option>
-                  <option value="ur">Urdu</option>
-                  <option value="vi">Vietnamese</option>
-                  <option value="cy">Welsh</option>
-                  <option value="yua">Yucatec Maya</option>
-                </select>
+                <mat-select matNativeControl
+                            [formControl]="languageFormControl"
+                            (selectionChange)="translate()">
+                  <mat-option value="en">English</mat-option>
+                  <mat-option value="af">Afrikaans</mat-option>
+                  <mat-option value="sq">Albanian</mat-option>
+                  <mat-option value="am">Amharic</mat-option>
+                  <mat-option value="ar">Arabic</mat-option>
+                  <mat-option value="hy">Armenian</mat-option>
+                  <mat-option value="as">Assamese</mat-option>
+                  <mat-option value="az">Azerbaijani</mat-option>
+                  <mat-option value="bn">Bangla</mat-option>
+                  <mat-option value="bs">Bosnian (Latin)</mat-option>
+                  <mat-option value="bg">Bulgarian</mat-option>
+                  <mat-option value="yue">Cantonese (Traditional)</mat-option>
+                  <mat-option value="ca">Catalan</mat-option>
+                  <mat-option value="zh-Hans">Chinese Simplified</mat-option>
+                  <mat-option value="zh-Hant">Chinese Traditional</mat-option>
+                  <mat-option value="hr">Croatian</mat-option>
+                  <mat-option value="cs">Czech</mat-option>
+                  <mat-option value="da">Danish</mat-option>
+                  <mat-option value="prs">Dari</mat-option>
+                  <mat-option value="nl">Dutch</mat-option>
+                  <mat-option value="en">English</mat-option>
+                  <mat-option value="et">Estonian</mat-option>
+                  <mat-option value="fj">Fijian</mat-option>
+                  <mat-option value="fil">Filipino</mat-option>
+                  <mat-option value="fi">Finnish</mat-option>
+                  <mat-option value="fr">French</mat-option>
+                  <mat-option value="fr-ca">French (Canada)</mat-option>
+                  <mat-option value="de">German</mat-option>
+                  <mat-option value="el">Greek</mat-option>
+                  <mat-option value="gu">Gujarati</mat-option>
+                  <mat-option value="ht">Haitian Creole</mat-option>
+                  <mat-option value="he">Hebrew</mat-option>
+                  <mat-option value="hi">Hindi</mat-option>
+                  <mat-option value="mww">Hmong Daw</mat-option>
+                  <mat-option value="hu">Hungarian</mat-option>
+                  <mat-option value="is">Icelandic</mat-option>
+                  <mat-option value="id">Indonesian</mat-option>
+                  <mat-option value="iu">Inuktitut</mat-option>
+                  <mat-option value="ga">Irish</mat-option>
+                  <mat-option value="it">Italian</mat-option>
+                  <mat-option value="ja">Japanese</mat-option>
+                  <mat-option value="kn">Kannada</mat-option>
+                  <mat-option value="kk">Kazakh</mat-option>
+                  <mat-option value="km">Khmer</mat-option>
+                  <mat-option value="tlh-Latn">Klingon</mat-option>
+                  <mat-option value="tlh-Piqd">Klingon (plqaD)</mat-option>
+                  <mat-option value="ko">Korean</mat-option>
+                  <mat-option value="ku">Kurdish (Central)</mat-option>
+                  <mat-option value="kmr">Kurdish (Northern)</mat-option>
+                  <mat-option value="lo">Lao</mat-option>
+                  <mat-option value="lv">Latvian</mat-option>
+                  <mat-option value="lt">Lithuanian</mat-option>
+                  <mat-option value="mg">Malagasy</mat-option>
+                  <mat-option value="ms">Malay</mat-option>
+                  <mat-option value="ml">Malayalam</mat-option>
+                  <mat-option value="mt">Maltese</mat-option>
+                  <mat-option value="mi">Maori</mat-option>
+                  <mat-option value="mr">Marathi</mat-option>
+                  <mat-option value="my">Myanmar</mat-option>
+                  <mat-option value="ne">Nepali</mat-option>
+                  <mat-option value="nb">Norwegian</mat-option>
+                  <mat-option value="or">Odia</mat-option>
+                  <mat-option value="ps">Pashto</mat-option>
+                  <mat-option value="fa">Persian</mat-option>
+                  <mat-option value="pl">Polish</mat-option>
+                  <mat-option value="pt">Portuguese (Brazil)</mat-option>
+                  <mat-option value="pt-pt">Portuguese (Portugal)</mat-option>
+                  <mat-option value="pa">Punjabi</mat-option>
+                  <mat-option value="otq">Queretaro Otomi</mat-option>
+                  <mat-option value="ro">Romanian</mat-option>
+                  <mat-option value="ru">Russian</mat-option>
+                  <mat-option value="sm">Samoan</mat-option>
+                  <mat-option value="sr-Cyrl">Serbian (Cyrillic)</mat-option>
+                  <mat-option value="sr-Latn">Serbian (Latin)</mat-option>
+                  <mat-option value="sk">Slovak</mat-option>
+                  <mat-option value="sl">Slovenian</mat-option>
+                  <mat-option value="es">Spanish</mat-option>
+                  <mat-option value="sw">Swahili</mat-option>
+                  <mat-option value="sv">Swedish</mat-option>
+                  <mat-option value="ty">Tahitian</mat-option>
+                  <mat-option value="ta">Tamil</mat-option>
+                  <mat-option value="te">Telugu</mat-option>
+                  <mat-option value="th">Thai</mat-option>
+                  <mat-option value="ti">Tigrinya</mat-option>
+                  <mat-option value="to">Tongan</mat-option>
+                  <mat-option value="tr">Turkish</mat-option>
+                  <mat-option value="uk">Ukrainian</mat-option>
+                  <mat-option value="ur">Urdu</mat-option>
+                  <mat-option value="vi">Vietnamese</mat-option>
+                  <mat-option value="cy">Welsh</mat-option>
+                  <mat-option value="yua">Yucatec Maya</mat-option>
+                </mat-select>
               </mat-form-field>
+              <button mat-stroked-button
+                      color="basic"
+                      (click)="switchTranslation()">
+                <mat-icon>
+                  translate
+                </mat-icon>
+              </button>
             </mat-panel-description>
           </mat-expansion-panel-header>
 
@@ -199,28 +208,23 @@
     </mat-accordion>
     <button (click)="translate()">FOO TRANSLATE</button>
     <button (click)="synth()">FOO AUDIO</button>
-    <button (click)="typeWriter('TEST')">FOO TW</button>
   </mat-drawer>
 
   <mat-drawer-content>
     <div class="form-container">
       <div id="form-flex-container">
-        <!-- Warning Alert -->
-        <div class="alert alert-danger alert-dismissible fade show" *ngIf="badwordWarning">
-          <strong>Warning!</strong> Please enter a valid input without the use of profanity.
-          <button type="button"
-                  class="btn-close"
-                  data-bs-dismiss="alert"
-                  aria-label="Close"
-                  (click)="closeWarning()"></button>
-        </div>
-
         <div id="conversation-history">
 
-            
-
-
           <mat-list dense id="message-list">
+            <!-- Warning Alert -->
+            <div class="alert alert-danger alert-dismissible fade show" *ngIf="badwordWarning">
+              <strong>Warning!</strong> Please enter a valid input without the use of profanity.
+              <button type="button"
+                      class="btn-close"
+                      data-bs-dismiss="alert"
+                      aria-label="Close"
+                      (click)="closeWarning()"></button>
+            </div>
             <mat-list-item *ngFor="let message of messages">
               <p> {{ message }} </p>
             </mat-list-item>

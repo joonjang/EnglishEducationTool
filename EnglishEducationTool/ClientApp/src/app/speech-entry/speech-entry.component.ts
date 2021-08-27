@@ -96,9 +96,9 @@ export class SpeechEntryComponent implements OnInit {
   dataSource = EMPTY_SPELLCHECK;
   dicObj: RootDictionary[] = EMPTY_DIC;
 
-// data variable assignment is unclear, but it works
-// and it works in the opposite way in which i intended
-// but it still works
+  // data variable assignment is unclear, but it works
+  // and it works in the opposite way in which i intended
+  // but it still works
   engDic!: RootDictionary[];
   tranDic!: RootDictionary[];
   tranSymb = "";
@@ -220,9 +220,21 @@ export class SpeechEntryComponent implements OnInit {
     let defineWord = this.searchFormControl.value;
 
     ////// MOCK JSON DEFINIITION 
+    //if (defineWord != "") {
+    //  this.dictionaryService.getMockWord(defineWord).subscribe(data => {
+    //    //this.engDic = data;
+    //    this.engDic = JSON.parse(JSON.stringify(data));
+    //    this.dicObj = this.engDic;
+    //    console.log(this.dicObj);
+    //  }, error => {
+    //    console.log(error);
+    //    this.dicObj = EMPTY_DIC;
+    //  })
+    //}
+
+    //////// dictionary API
     if (defineWord != "") {
-      this.dictionaryService.getMockWord(defineWord).subscribe(data => {
-        //this.engDic = data;
+      this.dictionaryService.getWord(defineWord).subscribe(data => {
         this.engDic = JSON.parse(JSON.stringify(data));
         this.dicObj = this.engDic;
         console.log(this.dicObj);
@@ -231,19 +243,6 @@ export class SpeechEntryComponent implements OnInit {
         this.dicObj = EMPTY_DIC;
       })
     }
-
-    //////// dictionary API
-    //if (defineWord != "") {
-    //  this.dictionaryService.getWord(defineWord).subscribe(data => {
-    //    //this.engDic = data;
-    //    this.engDic = new DefinitionObject(data);
-    //    this.dicObj = data;
-    //    console.log(this.dicObj);
-    //  }, error => {
-    //    console.log(error);
-    //    this.dicObj = EMPTY_DIC;
-    //  })
-    //}
   }
 
 
@@ -251,7 +250,9 @@ export class SpeechEntryComponent implements OnInit {
 
 
   //DONE: TRANSLATE FRONT END TYPESCRIPT SERVICE TO COMPONENT
-  //todo: go back to original english definition capability
+  //DONE: go back to original english definition capability
+
+  //object to JSON to object to manage array mutability tendency
   async translate() {
     this.tranDic = JSON.parse(JSON.stringify(await this.translateService.translateDictionary(this.engDic, this.languageFormControl.value)));
     this.tranSymb = this.languageFormControl.value;

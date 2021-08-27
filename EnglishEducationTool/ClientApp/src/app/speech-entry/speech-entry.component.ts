@@ -50,6 +50,20 @@ const EMPTY_DIC = [{
   }]
 }];
 
+class DefinitionObject {
+  private readonly _definition: RootDictionary[];
+
+  constructor(def: RootDictionary[]) {
+    this._definition = def;
+  }
+
+  get Definition() {
+    return this._definition;
+  }
+
+}
+
+
 @Component({
   selector: 'app-speech-entry',
   templateUrl: './speech-entry.component.html',
@@ -81,12 +95,11 @@ export class SpeechEntryComponent implements OnInit {
   displayedColumns: string[] = ['word', 'suggestions'];
   dataSource = EMPTY_SPELLCHECK;
   dicObj: RootDictionary[] = EMPTY_DIC;
-  engDic: RootDictionary[] = EMPTY_DIC;
-  tranDic: [RootDictionary[], string] =
-    [
-      EMPTY_DIC,
-      ""
-    ];
+
+  engDic!: RootDictionary[];
+  tranDic!: RootDictionary[];
+  tranSymb = "";
+
   languageFormControl = new FormControl("en");
 
   audioBlob: any;
@@ -200,19 +213,14 @@ export class SpeechEntryComponent implements OnInit {
 
   ///// DONE: implement dictionary API service so the component doesnt know the logic, only exposed to methods
   getDefinition() {
+    this.languageFormControl.setValue("en");
     let defineWord = this.searchFormControl.value;
 
-    ////todo:D debugging with mock data definition
-    //  "Hollo, wrld! I am eaten a apple"
-    //this.dictionaryService.getMockWord(defineWord).subscribe(data => {
-    //  this.dicObj = data;
-    //  console.log(this.dicObj);
-    //}, error => console.log(error));
-
-    ////// dictionary API
+    ////// MOCK JSON DEFINIITION 
     if (defineWord != "") {
-      this.dictionaryService.getWord(defineWord).subscribe(data => {
-        this.engDic = data;
+      this.dictionaryService.getMockWord(defineWord).subscribe(data => {
+        //this.engDic = data;
+        this.engDic = JSON.parse(JSON.stringify(data));
         this.dicObj = this.engDic;
         console.log(this.dicObj);
       }, error => {
@@ -221,6 +229,43 @@ export class SpeechEntryComponent implements OnInit {
       })
     }
 
+    //////// dictionary API
+    //if (defineWord != "") {
+    //  this.dictionaryService.getWord(defineWord).subscribe(data => {
+    //    //this.engDic = data;
+    //    this.engDic = new DefinitionObject(data);
+    //    this.dicObj = data;
+    //    console.log(this.dicObj);
+    //  }, error => {
+    //    console.log(error);
+    //    this.dicObj = EMPTY_DIC;
+    //  })
+    //}
+  }
+
+
+
+
+
+  //DONE: TRANSLATE FRONT END TYPESCRIPT SERVICE TO COMPONENT
+  //todo: go back to original english definition capability
+  async translate() {
+    this.tranDic = JSON.parse(JSON.stringify(await this.translateService.translateDictionary(this.engDic, this.languageFormControl.value)));
+    this.tranSymb = this.languageFormControl.value;
+    this.dicObj = this.engDic;
+  }
+
+  //TODO: CURRENT TASK, CHANGE ARRAY MUTABILITY
+  switchTranslation() {
+    if (this.languageFormControl.value != "en") {
+      this.dicObj = this.tranDic;
+      this.languageFormControl.setValue("en");
+      // turn form to english
+    } else {
+      this.dicObj = this.engDic;
+      this.languageFormControl.setValue(this.tranSymb);
+      // turn language to translation
+    }
   }
 
   // play Dictionary API definition pronounciation
@@ -231,25 +276,6 @@ export class SpeechEntryComponent implements OnInit {
     audio.play();
   }
 
-  //DONE: TRANSLATE FRONT END TYPESCRIPT SERVICE TO COMPONENT
-  //todo: go back to original english definition capability
-  async translate() {
-    this.tranDic[0] = await this.translateService.translateDictionary(this.dicObj, this.languageFormControl.value);
-    this.tranDic[1] = this.languageFormControl.value;
-    this.dicObj = this.tranDic[0]
-  }
-
-  switchTranslation() {
-    if (this.languageFormControl.value != "en") {
-      this.dicObj = this.engDic;
-      this.languageFormControl.setValue("en");
-      // turn form to english
-    } else {
-      this.dicObj = this.tranDic[0];
-      this.languageFormControl.setValue(this.tranDic[1]);
-      // turn language to translation
-    }
-  }
 
   //DONE: !!! AUDIO SYNTH METHOD FRONT END
   synth() {

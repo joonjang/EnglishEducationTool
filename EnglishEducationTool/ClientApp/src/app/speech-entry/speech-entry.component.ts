@@ -96,6 +96,9 @@ export class SpeechEntryComponent implements OnInit {
   dataSource = EMPTY_SPELLCHECK;
   dicObj: RootDictionary[] = EMPTY_DIC;
 
+// data variable assignment is unclear, but it works
+// and it works in the opposite way in which i intended
+// but it still works
   engDic!: RootDictionary[];
   tranDic!: RootDictionary[];
   tranSymb = "";

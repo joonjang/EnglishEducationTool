@@ -36,27 +36,27 @@ namespace EnglishEducationTool.Controllers
         public async Task<ActionResult<FlaggedToken[]>> PostSpell([FromBody] ChatDto chatVal)
         {
             //// todo:D mock method to not overuse 3rd party server
-            return await MockProofing(chatVal.UserResponse);
+            //return await MockProofing(chatVal.UserResponse);
 
             //TODO: D moderation api
-            //if (ModerateText(chatVal.UserResponse))
-            //{
-            //    return null;
-            //}
+            if (ModerateText(chatVal.UserResponse))
+            {
+                return null;
+            }
 
-            //FlaggedToken[] userProof = Array.Empty<FlaggedToken>();
+            FlaggedToken[] userProof = Array.Empty<FlaggedToken>();
 
-            //// microsoft SpellCheck API
-            //try
-            //{
-            //    userProof = await Proofing(chatVal.UserResponse);
-            //}
-            //catch (Exception e)
-            //{
-            //    Console.WriteLine(e);
-            //};
+            // microsoft SpellCheck API
+            try
+            {
+                userProof = await Proofing(chatVal.UserResponse);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            };
 
-            //return userProof;
+            return userProof;
         }
 
         // POST api/<ChatController>
@@ -79,9 +79,10 @@ namespace EnglishEducationTool.Controllers
 
             return new ChatDto()
             {
-                BotResponse = "Hello Joon, you can do it!",
+                //TODO: userResponse is converted to text to speech as place holder, use botResponse in production
+                BotResponse = chatVal.UserResponse + " ---[DEBUG]",
                 //TODO: D text to speach response
-                //SynthAudio = await SynthesizeAudioAsync("Hello Joon, you can do it!")
+                SynthAudio = await SynthesizeAudioAsync(chatVal.UserResponse)
             };
         }
 

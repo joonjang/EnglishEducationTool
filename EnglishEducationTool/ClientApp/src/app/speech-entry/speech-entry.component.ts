@@ -105,7 +105,7 @@ export class SpeechEntryComponent implements OnInit {
 
   languageFormControl = new FormControl("en");
 
-  audioBlob: any;
+  fooAudioBlob: any;
 
   constructor(
     public service: VoiceRecognitionService,
@@ -161,16 +161,16 @@ export class SpeechEntryComponent implements OnInit {
     else {
       ////todo:D debug string input used to correct spelling
       //this.wordToProof = "Hollo, wrld! I am eaten a apple"
-
+      this.messages.push("AI: " + this.queueAiMsg)
+      this.service.stop(this.inputFormControl.value);
+      this.messages.push("User: " + inputVal.userResponse);
+      this.tw.nativeElement.innerHTML = "";
       //BACKLOG: HYPERLINK THE USER INPUT WITH JSON INFO OF CORRECTED SPELLING AND HOW MANY TOKEN
       // SUGGESTIONS HAVE BEEN RECEIVED
       this.chatService.broadcastMessage(inputVal, "Bot").subscribe((data: ChatDto) => {
-        this.audioBlob = data.synthAudio;
-        this.messages.push("AI: " + this.queueAiMsg)
-        this.service.stop(this.inputFormControl.value);
-        this.messages.push("User: " + inputVal.userResponse);
-
-        this.typeWriter(data.botResponse);
+        this.fooAudioBlob = data.synthAudio;
+        this.synth(data.synthAudio, data.botResponse);
+        //Promise.all([this.typeWriter(data.botResponse), this.synth(data.synthAudio)]);
       });
     }
 
@@ -246,9 +246,6 @@ export class SpeechEntryComponent implements OnInit {
   }
 
 
-
-
-
   //DONE: TRANSLATE FRONT END TYPESCRIPT SERVICE TO COMPONENT
   //DONE: go back to original english definition capability
 
@@ -259,7 +256,7 @@ export class SpeechEntryComponent implements OnInit {
     this.dicObj = this.engDic;
   }
 
-  //TODO: CURRENT TASK, CHANGE ARRAY MUTABILITY
+  //DONE: CURRENT TASK, CHANGE ARRAY MUTABILITY
   switchTranslation() {
     if (this.languageFormControl.value != "en") {
       this.dicObj = this.tranDic;
@@ -282,31 +279,32 @@ export class SpeechEntryComponent implements OnInit {
 
 
   //DONE: !!! AUDIO SYNTH METHOD FRONT END
-  synth() {
-    let objectURL = "data:audio/wav;base64," + this.audioBlob;
-
-    let audio = new Audio();
-    audio.src = objectURL;
-    audio.play().catch(err => console.log(err));
+  synth(audioBlob: Blob | undefined, txt: string | undefined) {
+    if (audioBlob != undefined) {
+      let objectURL = "data:audio/wav;base64," + audioBlob;
+      let audio = new Audio();
+      audio.src = objectURL;
+      audio.play().catch(err => console.log(err));
+      this.typeWriter(txt);
+    }
   }
 
   async typeWriter(txt: string | undefined) {
-    this.tw.nativeElement.innerHTML = "";
-    await new Promise(f => setTimeout(f, 400));
-    this.tw.nativeElement.innerHTML = "AI: ";
-    let SPEED = 50;
-    let WAITTIME = 5
+    //this.tw.nativeElement.innerHTML = "";
+    //await new Promise(f => setTimeout(f, 400));
+    //this.tw.nativeElement.innerHTML = "AI: ";
+    let SPEED = 60;
+    let WAITTIME = 0
     let DOTWAIT = 400;
 
-    for (var i = 0; i < WAITTIME; i++) {
-      if (i % 3 == 0) {
-        this.tw.nativeElement.innerHTML = "AI: ";
-        await new Promise(f => setTimeout(f, DOTWAIT));
-      }
-      this.tw.nativeElement.innerHTML += ".";
-      await new Promise(f => setTimeout(f, DOTWAIT));
-
-    }
+    //for (var i = 0; i < WAITTIME; i++) {
+    //  if (i % 3 == 0) {
+    //    this.tw.nativeElement.innerHTML = "AI: ";
+    //    await new Promise(f => setTimeout(f, DOTWAIT));
+    //  }
+    //  this.tw.nativeElement.innerHTML += ".";
+    //  await new Promise(f => setTimeout(f, DOTWAIT));
+    //}
 
     this.tw.nativeElement.innerHTML = "AI: ";
 

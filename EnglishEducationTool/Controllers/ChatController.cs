@@ -1,5 +1,6 @@
 ﻿using EnglishEducationTool.Data.Models;
 using EnglishEducationTool.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.CognitiveServices.ContentModerator;
 using Microsoft.CognitiveServices.Speech;
@@ -31,6 +32,7 @@ namespace EnglishEducationTool.Controllers
         }
 
         // POST api/<ChatController>
+        [Authorize]
         [HttpPost]
         [Route("postSpell")]
         public async Task<ActionResult<FlaggedToken[]>> PostSpell([FromBody] ChatDto chatVal)
@@ -60,6 +62,7 @@ namespace EnglishEducationTool.Controllers
         }
 
         // POST api/<ChatController>
+        [Authorize]
         [HttpPost]
         [Route("postBot")]
         public async Task<ActionResult<ChatDto>> PostBot([FromBody] ChatDto chatVal)
@@ -87,6 +90,7 @@ namespace EnglishEducationTool.Controllers
         }
 
         // POST api/<ChatController>
+        [Authorize]
         [HttpPost]
         [Route("postTranslate")]
         public async Task<ActionResult<string>> PostTranslate([FromBody] ChatDto chatVal)

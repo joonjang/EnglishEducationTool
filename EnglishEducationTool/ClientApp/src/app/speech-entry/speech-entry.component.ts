@@ -278,7 +278,7 @@ export class SpeechEntryComponent implements OnInit {
   }
 
 
-  //DONE: !!! AUDIO SYNTH METHOD FRONT END
+  //DONE: AUDIO SYNTH METHOD FRONT END
   synth(audioBlob: Blob | undefined, txt: string | undefined) {
     if (audioBlob != undefined) {
       let objectURL = "data:audio/wav;base64," + audioBlob;

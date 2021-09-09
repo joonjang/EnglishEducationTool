@@ -6,6 +6,7 @@ using Microsoft.Azure.CognitiveServices.ContentModerator;
 using Microsoft.CognitiveServices.Speech;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using OpenAI_API;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -314,6 +315,26 @@ namespace EnglishEducationTool.Controllers
             {
                 xmlSerializer.Serialize(writer, anyobject);
             }
+        }
+
+        #endregion
+
+        #region OpenAi API
+
+        async Task<string> OpenAiResponse(string userInput)
+        {
+            OpenAIAPI openAi = new OpenAIAPI(AppConfigs.OpenAiKey, engine: Engine.Davinci);
+
+            // CHAT EXAMPLE PROMPT
+            string fooPrompt = "The following is a conversation with an AI assistant. The assistant is helpful, creative, clever, and very friendly." +
+                "Human: Hello, who are you?" +
+                "AI: I am an AI created by OpenAI.How can I help you today?" +
+                "Human: I'd like to cancel my subscription." +
+                "AI: ";
+
+            var result = await openAi.Completions.CreateCompletionAsync(prompt: "");
+
+            return "";
         }
 
         #endregion

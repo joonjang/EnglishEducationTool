@@ -22,5 +22,7 @@ namespace EnglishEducationTool.Models
         public string SpeechApiKey { get; set; }
         public string SpeechApiEndpoint { get; set; }
         public string SpeechApiRegion { get; set; }
+
+        public string OpenAiKey { get; set; }
     }
 }
